@@ -1,4 +1,3 @@
-// src/components/molecules/MyButton.vue
 <template>
   <el-button type="primary" @click="$emit('click')">
     <slot></slot>
@@ -14,5 +13,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Ваши стили */
+
 </style>

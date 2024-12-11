@@ -1,4 +1,3 @@
-// src/pages/LoginPage.vue
 <template>
   <div class="login-page">
     <LoginForm />

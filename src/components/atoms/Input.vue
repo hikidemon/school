@@ -1,4 +1,3 @@
-// src/components/atoms/MyInput.vue
 <template>
   <el-form-item :label="label" :rules="rules">
     <el-input v-model="modelValue" :type="type"></el-input>
@@ -35,5 +34,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Ваши стили */
+
 </style>

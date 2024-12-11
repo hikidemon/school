@@ -1,4 +1,3 @@
-// src/components/organisms/LoginForm.vue
 <template>
   <el-form :model="form" @submit.native.prevent="onSubmit">
     <MyInput
@@ -45,5 +44,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Ваши стили */
+
 </style>
