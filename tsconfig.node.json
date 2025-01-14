@@ -1,24 +1,59 @@
 {
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "module": "ESNext",
+  "exclude": ["dist", "node_modules"],
+  "include": [
+    "env.d.ts",
+    "src",
+    "**/*.vue",
+    "**/*.ts",
+    "**/*.d.ts",
+
+    "auto-imports.d.ts",
+    "components.d.ts",
+    "vite.config.*",
+    "vitest.config.*"
+  ],
+
   "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+    /* Visit https://habr.com/ru/articles/542234/ to read more about this file */
+
+    "composite": true,
+    "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "target": "ES2022",
-    "lib": ["ES2023"],
+
+    "types": ["node", "jsdom"],
+    "baseUrl": "./",
+    "rootDirs": ["/*"],
+    "typeRoots": ["node_modules/@types"],
+
+    /* Basic Options */
+    "target": "ESNext",
     "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Strict checks */
+    //    "declaration": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "strictBindCallApply": true,
+    "newLine": "lf",
     "skipLibCheck": true,
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "isolatedModules": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
-  },
-  "include": ["vite.config.ts"]
+    "paths": {
+      "@/*": ["src/*"],
+      "mock-images": ["public/mock-images/*"],
+      "styles": ["src/assets/styles/*"]
+    }
+  }
 }

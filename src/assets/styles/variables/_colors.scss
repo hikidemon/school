@@ -1,0 +1,14 @@
+@use 'sass:color';
+
+// colors
+$color-white: #fff;
+$color-black: #000;
+$color-primary: #36ac55;
+$color-secondary: #fba0c9;
+
+$colors: (
+  white: $color-white,
+  black: $color-black,
+  primary: $color-primary,
+  secondary: $color-secondary,
+);

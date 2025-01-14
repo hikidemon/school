@@ -1,0 +1,9 @@
+.el-loading-mask {
+  --el-mask-color: var(--color-white);
+
+  border-radius: 24px;
+
+  .el-loading-spinner {
+    --el-color-primary: var(--color-primary);
+  }
+}

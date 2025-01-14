@@ -1,0 +1,24 @@
+@use 'sass:color';
+@use '../variables/index.scss' as *;
+
+@mixin generate-color-classes() {
+  @each $color-key, $color in $colors {
+    .color-#{'' + $color-key} {
+      color: $color;
+    }
+  }
+}
+
+@mixin generate-bg-color-classes() {
+  @each $color-key, $color in $colors {
+    .bg-color-#{'' + $color-key} {
+      background-color: $color;
+    }
+  }
+}
+
+@mixin generate-color-root-variables() {
+  @each $color-key, $color in $colors {
+    --color-#{'' + $color-key}: #{$color};
+  }
+}
