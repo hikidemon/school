@@ -5,7 +5,7 @@
     round
     :size="props.size"
     :type="props.type"
-    class="mg-button"
+    class="mg-button el-button"
     :class="{ 'no-border': props.noBorder }"
   >
     <slot name="default" />
@@ -16,7 +16,6 @@
 type Props = {
   size?: 'large' | 'default' | 'small'
   type?: 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'text' | '' | 'default'
-
   noBorder?: boolean
 }
 
@@ -29,7 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style scoped lang="scss">
 .no-border {
-  border: none !important;
+  border:1px;
 }
 
 .el-button {
@@ -37,16 +36,16 @@ const props = withDefaults(defineProps<Props>(), {
   --el-button-bg-color: var(--color-white);
   --el-button-text-color: var(--color-primary);
   --el-border-radius-round: 44px;
-
+  background-color:var(--color-primary) ;
   width: fit-content;
   display: block;
   border: none;
   font-weight: 500;
   text-align: center;
   transition:
-    box-shadow 0.3s ease,
-    color 0.3s ease,
-    background-color 0.3s ease;
+  box-shadow 0.3s ease,
+  color 0.3s ease,
+  background-color 0.3s ease;
 
   &:disabled {
     --el-button-text-color: var(--color-white);
@@ -73,11 +72,13 @@ const props = withDefaults(defineProps<Props>(), {
     &:active {
       --el-button-bg-color: var(--color-secondary);
 
-      box-shadow: none;
+      box-shadow: .3rem .3rem .6rem var(--greyLight-2), 
+      -.2rem -.2rem .5rem var(--white);
     }
 
     &:disabled {
-      box-shadow: none;
+      box-shadow:inset .2rem .2rem .5rem var(--greyLight-2), 
+      inset -.2rem -.2rem .5rem var(--white);
     }
   }
 
