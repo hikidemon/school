@@ -3,14 +3,14 @@
     <div v-loading="isLoading" class="auth-page__form">
       <h1 class="auth-page__title">Авторизация</h1>
       <el-form ref="formRef" :model="auth" label-position="top" :rules="rules" @submit.prevent>
-        <el-form-item label="Email" prop="email">
-          <el-input v-model="auth.email" placeholder="Введите email" class="w-100" @blur="handleBlur" />
-        </el-form-item>
-
-        <el-form-item label="Пароль" prop="password">
-          <el-input
+        
+        <a-input v-model="auth.email" label="Email" prop="email" placeholder="Введите email" class="w-100" @blur="handleBlur" />
+        
+        <a-input
             v-model="auth.password"
-            show-password
+            
+            label="Пароль"
+            prop="password"
             type="password"
             placeholder="Введите пароль"
             class="w-100"
@@ -18,8 +18,6 @@
             @input="handleBlur"
             @change="handleBlur"
           />
-        </el-form-item>
-
         <a-button native-type="submit" size="large" :disabled="isLoginDisabled" @click="handleSubmit()">
           Войти
         </a-button>
@@ -28,11 +26,11 @@
       <router-link :to="{ name: ROUTE_NAMES.Registration }" class="color-apple mt-20">Зарегистрироваться</router-link>
     </div>
   </div>
+
 </template>
 
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
-
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ROUTE_NAMES, REQUIRED_RULE, PASSWORD_RULE, EMAIL_RULE } from '@/common/constants'

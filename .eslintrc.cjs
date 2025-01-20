@@ -17,6 +17,7 @@ module.exports = {
     'eslint:recommended',
     '@vue/eslint-config-typescript',
     '@vue/eslint-config-prettier/skip-formatting',
+    
   ],
 
   globals: {
@@ -28,7 +29,7 @@ module.exports = {
     semi: ['error', 'never'],
     quotes: ['error', 'single'],
     'no-useless-constructor': 'off',
-    'linebreak-style': ['error', 'unix'],
+    'linebreak-style': ['error', 'windows'],
     'object-curly-spacing': ['error', 'always', { objectsInObjects: true }],
     'padding-line-between-statements': [
       'warn',

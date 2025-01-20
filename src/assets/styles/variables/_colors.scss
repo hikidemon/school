@@ -4,11 +4,29 @@
 $color-white: #fff;
 $color-black: #000;
 $color-primary: #36ac55;
+$color-primary-dark: #3d8263;
+$color-primary-light: #4effa7;
 $color-secondary: #fba0c9;
+$color-secondary-dark: #9e628c;
+$color-secondary-light: #ffbbeb;
+$color-dark:#1d2021;
+$lolor-primary-gredient: linear-gradient(90deg ,#03ff89, #48f2b9, #6dedc2);
+$animation-gradient: gradient-shift 4s linear infinite;
+
+$shadow: .3rem .3rem .6rem var(--greyLight-2), 
+-.2rem -.2rem .5rem var(--white);
+$inner-shadow: inset .2rem .2rem .5rem var(--greyLight-2), 
+inset -.2rem -.2rem .5rem var(--white);
 
 $colors: (
   white: $color-white,
   black: $color-black,
   primary: $color-primary,
   secondary: $color-secondary,
+  dark: $color-dark,
+  primary-dark:$color-primary-dark ,
+  primary-light:$color-primary-light,
+  secondary-dark:$color-secondary-dark,
+  secondary-light:$color-secondary-light,
+  
 );

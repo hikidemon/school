@@ -1,6 +1,6 @@
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-import { ref } from 'vue'
+//import { ref } from 'vue'
 
 import axios from 'axios'
 import useError from '@/common/composables/useError/useError'
@@ -10,18 +10,19 @@ export type ApiResponseType<T = unknown[]> = {
 }
 
 type ApiErrorType<T = unknown> = {
-  data: T
+  data: T,
+  message: string
 }
 
 export type ServiceResponseType<T, E = unknown> = Promise<
   [null, AxiosResponse<ApiResponseType<T>>] | [AxiosError<ApiErrorType<E>>]
 >
 
-const isRefreshed = ref(false)
+//const isRefreshed = ref(false)
 const { setErrorShow, setErrorMessage } = useError()
 
 export class AxiosService {
-  private axiosInstance!: AxiosInstance
+  readonly axiosInstance!: AxiosInstance
 
   constructor(config?: AxiosRequestConfig) {
     this.axiosInstance = axios.create(config)
