@@ -6,6 +6,7 @@ import axios from 'axios'
 import useError from '@/common/composables/useError/useError'
 
 export type ApiResponseType<T = unknown[]> = {
+  id: any
   data: T
 }
 
@@ -64,7 +65,7 @@ export class AxiosService {
     )
   }
 
-  protected async axiosCall<T = any>(config: AxiosRequestConfig): ServiceResponseType<T> {
+  public async axiosCall<T = any>(config: AxiosRequestConfig): ServiceResponseType<T> {
     try {
       const response = await this.axiosInstance.request<ApiResponseType<T>>(config)
 

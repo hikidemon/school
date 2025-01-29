@@ -3,29 +3,34 @@
     <div class="form-container sign-up-container">
       <el-form ref="registrFormRef" :model="registr" label-position="top" :rules="registrRules" @submit.prevent>
         <h1 class="h1">Регистрация</h1>
-
-        <a-input v-model="registr.email" label="Почта" placeholder="Email" type="email" class="styled-input w-100"
-          prop="email" />
-        <a-input v-model="registr.password" placeholder="Password" show-password prop="password" label="Пароль"
+        <el-form-item prop="email"  label="Почта" class="label">
+        <a-input v-model="registr.email"  placeholder="Email" type="email" class="styled-input w-100"
+         />
+        </el-form-item>
+        <el-form-item prop="password" label="Пароль" class="label">
+        <a-input v-model="registr.password" placeholder="Password"  
           type="password" class="styled-input w-100" @blur="handleRegistrBlur" @input="handleRegistrBlur"
-          @change="handleRegistrBlur" />
-        <a-button class="styled-button w-100" style="margin-top: 15px;" :disabled="isRegistrDisabled"
+          @change="handleRegistrBlur" :show-password="true"/>
+        </el-form-item>
+        <a-button class="styled-button w-100" style="margin-top: 15px" :disabled="isRegistrDisabled"
           @click="handleFormSubmit('registr')">
           Зарегистрироваться
         </a-button>
-
       </el-form>
     </div>
     <div class="form-container sign-in-container">
       <el-form ref="authFormRef" :model="auth" :rules="authRules" label-position="top" @submit.prevent>
         <h1>Авторизация</h1>
-        <a-input v-model="auth.email" placeholder="Email" type="email" class="styled-input w-100" label="Почта"
-          prop="email" />
-        <a-input v-model="auth.password" placeholder="Password" show-password prop="password" label="Пароль"
+        <el-form-item label="Почта" prop="email" class="label">
+        <a-input v-model="auth.email" placeholder="Email" type="email" class="styled-input w-100"  />
+        </el-form-item>
+        <el-form-item prop="password" label="Пароль" class="label">
+        <a-input v-model="auth.password" placeholder="Password" :show-password="true"
           type="password" class="styled-input w-100" @blur="handleAuthBlur" @input="handleAuthBlur"
           @change="handleAuthBlur" />
+        </el-form-item>
         <router-link :to="{ name: ROUTE_NAMES.FailPassword }" class="router-link">Забыли пароль?</router-link>
-        <a-button native-type="submit" class="styled-button w-100 " :disabled="isLoginDisabled"
+        <a-button native-type="submit" class="styled-button w-100" :disabled="isLoginDisabled"
           @click="handleFormSubmit('auth')">
           Войти
         </a-button>
@@ -35,15 +40,11 @@
       <div class="overlay">
         <div class="overlay-panel overlay-left">
           <h1>Авторизация</h1>
-          <a-button class="ghost styled-button" @click="togglePanel('signIn')">
-            Авторизоваться
-          </a-button>
+          <a-button class="ghost styled-button" @click="togglePanel('signIn')"> Авторизоваться </a-button>
         </div>
         <div class="overlay-panel overlay-right">
           <h1>Регистрация</h1>
-          <a-button class="ghost styled-button" @click="togglePanel('signUp')">
-            Зарегистрироваться
-          </a-button>
+          <a-button class="ghost styled-button" @click="togglePanel('signUp')"> Зарегистрироваться </a-button>
         </div>
       </div>
     </div>
@@ -57,7 +58,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ROUTE_NAMES, REQUIRED_RULE, PASSWORD_RULE, EMAIL_RULE } from '@/common/constants'
 import { authService } from '@/common/utils/AuthService'
-import { jwtDecode } from 'jwt-decode'
+//import { jwtDecode } from 'jwt-decode'
 
 const router = useRouter()
 const registrFormRef = ref<FormInstance>()
@@ -67,7 +68,6 @@ const isLoginDisabled = ref(true)
 const isRegistrDisabled = ref(true)
 const isRightPanelActive = ref(false)
 
-
 const auth = ref({
   email: '',
   password: '',
@@ -76,7 +76,7 @@ const auth = ref({
 const registr = ref({
   email: '',
   password: '',
-  id_role: '1'
+  id_role: '1',
 })
 
 const registrRules = reactive<FormRules<typeof registr>>({
@@ -120,7 +120,7 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
         const [error] = await authService.register({
           email: registr.value.email,
           password: registr.value.password,
-          id_role: registr.value.id_role
+          id_role: registr.value.id_role,
         })
 
         if (error) {
@@ -143,7 +143,7 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
 
         isRightPanelActive.value = false
       } else {
-        const [error, response] = await authService.login({
+        const [error] = await authService.login({
           email: auth.value.email,
           password: auth.value.password,
         })
@@ -182,14 +182,19 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
 }
 
 const togglePanel = (action: 'signUp' | 'signIn') => {
-  isRightPanelActive.value = (action === 'signUp')
+  isRightPanelActive.value = action === 'signUp'
 }
 </script>
 
 <style scoped>
 * {
   box-sizing: border-box;
-
+}
+.label {
+ 
+ text-align: left;
+ color: var(--color-black);
+  width:100%;
 }
 
 body {
@@ -206,9 +211,8 @@ body {
 }
 
 button {
-  background-color: #91e9d0
+  background-color: #91e9d0;
 }
-
 
 a {
   color: #333;
@@ -225,7 +229,9 @@ input {
 .container {
   background: #1d2021;
   border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, .2), 0 10px 10px rgba(0, 0, 0, .2);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.2),
+    0 10px 10px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
   width: 800px;
@@ -273,10 +279,8 @@ input {
   width: 100%;
 }
 
-
-
 button:active {
-  transform: scale(.95);
+  transform: scale(0.95);
 }
 
 button:focus {
@@ -287,15 +291,13 @@ button.ghost {
   margin-top: -30px;
   background: var(--color-primary-light);
   border-color: #000000;
-
-
 }
 
 .form-container {
   position: absolute;
   top: 0;
   height: 100%;
-  transition: all .6s ease-in-out;
+  transition: all 0.6s ease-in-out;
 }
 
 .sign-in-container {
@@ -318,7 +320,7 @@ button.ghost {
   width: 50%;
   height: 100%;
   overflow: hidden;
-  transition: transform .6s ease-in-out;
+  transition: transform 0.6s ease-in-out;
   z-index: 1;
 }
 
@@ -331,7 +333,7 @@ button.ghost {
   height: 100%;
   width: 200%;
   transform: translateY(0);
-  transition: transform .6s ease-in-out;
+  transition: transform 0.6s ease-in-out;
   z-index: 0;
 }
 
@@ -347,7 +349,7 @@ button.ghost {
   width: 50%;
   text-align: center;
   transform: translateY(0);
-  transition: transform .6s ease-in-out;
+  transition: transform 0.6s ease-in-out;
 }
 
 .overlay-right {
@@ -390,7 +392,6 @@ button.ghost {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   background: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
   animation: gradient-shift 4s linear infinite;
-
 }
 
 .router-link {
