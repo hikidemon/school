@@ -1,4 +1,5 @@
-import { AxiosService, ServiceResponseType,API_CONFIG } from './AxiosService'
+import type {  ServiceResponseType } from './AxiosService'
+import { AxiosService,API_CONFIG  } from './AxiosService'
 
 class AuthService extends AxiosService {
   public async login(credentials: { email: string; password: string;}): ServiceResponseType<{ token: string }> {

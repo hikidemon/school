@@ -1,23 +1,21 @@
 <template>
-  <el-form-item :label="label" :prop="prop" class="label">
+
     <el-input
       v-model="localValue"
       :type="type"
       :placeholder="placeholder"
       class="form_input w-100"
-      :show-password="false"
+      :show-password="showPassword"
+      
     />
-  </el-form-item>
+ 
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
 const props = defineProps({
-  label: {
-    type: String,
-    required: true,
-  },
+
   modelValue: {
     type: String,
     required: true,
@@ -30,10 +28,12 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  prop: {
-    type: String,
-    required: true,
+
+  showPassword:{
+    type:Boolean,
+    default: false,
   },
+
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -63,20 +63,14 @@ watch(
   box-shadow: $inner-shadow;
   background: none;
   font-family: inherit;
-  color: var(--greyDark);
+  color: var(--color-black);
 
 
 }
-:root {
-  --white: #ffffff;
-  --greyLight-1: #e4ebf5;
-  --greyLight-2: #c8d0e7;
-  --greyLight-3: #bec8e4;
-  --greyDark: #9baacf;
-}
+
 .label {
  
   text-align: left;
-  color: var(--color-black-default);
+  color: var(--color-black);
 }
 </style>

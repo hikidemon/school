@@ -1,6 +1,7 @@
 <template>
   <el-config-provider :locale="ru">
     <layout-default>
+      
       <router-view v-loading="isGlobalLoading" />
     </layout-default>
   </el-config-provider>

@@ -20,7 +20,8 @@ const componentsConfig = Components({
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }): UserConfig => {
-  const env = loadEnv(mode, process.cwd(), '')
+  
+  loadEnv(mode, process.cwd(), '')
 
   return {
     build: {
