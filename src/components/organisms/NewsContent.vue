@@ -5,13 +5,17 @@
       <post-card
         v-for="post in posts"
         :key="post.id"
+        :id="post.id"
         :title="post.title"
         :content="post.content"
         :image="post.image"
         :date="post.date"
         :type="post.type"
+        :likes="post.likes"
+        :is-liked-by-user="post.isLikedByUser"
         @open="handleOpenPost(post)"
-       
+        class="fade-in post-card"
+        @delete="handleDeletePost"
       />
     </div>
   </div>
@@ -50,6 +54,9 @@ const fetchPosts = async () => {
 const handleOpenPost = (post: Post) => {
   console.log('Открыт пост:', post)
 }
+const handleDeletePost = (postId: number) => {
+  posts.value = posts.value.filter(post => post.id !== postId) 
+}
 
 const getTestPosts = (): Post[] => {
   return [
@@ -60,6 +67,8 @@ const getTestPosts = (): Post[] => {
       image: programsIcon,
       type:'event',
       date:'2025-10-01',
+      likes:  10,
+      isLikedByUser: true
     },
     {
       id: 2,
@@ -68,6 +77,8 @@ const getTestPosts = (): Post[] => {
       image:  programsIcon,
       date:'2025-10-01',
       type:'news',
+      likes:  10,
+      isLikedByUser:false
     },
     {
       id: 3,
@@ -76,6 +87,8 @@ const getTestPosts = (): Post[] => {
       image: programsIcon,
       date:'2025-10-01',
       type:'event',
+      likes:  10,
+      isLikedByUser:false
     },
     {
       id: 4,
@@ -84,12 +97,97 @@ const getTestPosts = (): Post[] => {
       image:  programsIcon,
       date:'2025-10-01',
       type:'event',
+      likes:  10,
+      isLikedByUser:false
+    },
+    {
+      id: 4,
+      title: 'Тестовый пост 2',
+      content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
+      image:  programsIcon,
+      date:'2025-10-01',
+      type:'event',
+      likes:  10,
+      isLikedByUser:false
+    },
+    {
+      id: 4,
+      title: 'Тестовый пост 2',
+      content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
+      image:  programsIcon,
+      date:'2025-10-01',
+      type:'event',
+      likes:  10,
+      isLikedByUser:false
+    },
+    {
+      id: 4,
+      title: 'Тестовый пост 2',
+      content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
+      image:  programsIcon,
+      date:'2025-10-01',
+      type:'event',
+      likes:  10,
+      isLikedByUser:false
+    },
+    {
+      id: 4,
+      title: 'Тестовый пост 2',
+      content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
+      image:  programsIcon,
+      date:'2025-10-01',
+      type:'event',
+      likes:  10,
+      isLikedByUser:false
+    },
+    {
+      id: 4,
+      title: 'Тестовый пост 2',
+      content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
+      image:  programsIcon,
+      date:'2025-10-01',
+      type:'event',
+      likes:  10,
+      isLikedByUser:false
+    },
+    {
+      id: 4,
+      title: 'Тестовый пост 2',
+      content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
+      image:  programsIcon,
+      date:'2025-10-01',
+      type:'event',
+      likes:  10,
+      isLikedByUser:false
     },
   ]
 }
 
+const setupIntersectionObserver = () => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in-visible')
+        } else {
+          entry.target.classList.remove('fade-in-visible')
+        }
+      })
+    },
+    { threshold: 0.3 } 
+  )
+
+  const postCards = document.querySelectorAll('.post-card')
+  postCards.forEach((card) => {
+    observer.observe(card)
+  })
+}
+
+
 onMounted(() => {
-  fetchPosts()
+  fetchPosts().then(() => {
+    setupIntersectionObserver()
+  })
 })
 </script>
 
@@ -97,6 +195,7 @@ onMounted(() => {
 .main-content {
   flex: 1;
   padding: 20px;
+ 
 }
 
 h1 {
@@ -104,19 +203,38 @@ h1 {
   margin-bottom: 20px;
   color: #333;
 }
-.post-card .date {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #666;
-}
-.post-card img {
-  width: 200px; 
-  height: 200px; 
-  object-fit: cover; 
-}
+
 .post-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); 
-  gap: 10px; 
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 80vh;
+ 
+}
+
+.post-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.post-card.fade-in-visible {
+  opacity: 1;
+  transform: translateY(0); 
+}
+
+.post-card.fade-in-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.post-card.fade-in-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.post-list::-webkit-scrollbar {
+  display: none;
 }
 </style>

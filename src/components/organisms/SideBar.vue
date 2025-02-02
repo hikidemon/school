@@ -1,40 +1,83 @@
 <template>
   <el-aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>Меню</h2>
+    </div>
     <side-bar-item
       v-for="item in items"
       :key="item.id"
       :title="item.title"
       :icon="item.icon"
+      :active="activeItem === item.id"
       @click="handleItemClick(item)"
+      :class="{ 'inactive': isProfilePage && item.id === 1 }"
     />
   </el-aside>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watchEffect,computed  } from 'vue'
 import SideBarItem from '../molecules/SideBarItem.vue'
-import newsIcon from '@/assets/icons/2.png'
-import scheduleIcon from '@/assets/icons/4.png'
-import eventsIcon from '@/assets/icons/1.png'
-import programsIcon from '@/assets/icons/3.png'
+import { Document, Calendar, Star, List } from '@element-plus/icons-vue'
+import { useRouter, useRoute } from 'vue-router'
 
 const items = ref([
-  { id: 1, title: 'Новости', icon: newsIcon },
-  { id: 2, title: 'Расписание', icon: scheduleIcon },
-  { id: 3, title: 'Мероприятия', icon: eventsIcon },
-  { id: 4, title: 'Программы', icon: programsIcon },
+  { id: 1, title: 'Новости', icon: Document , route: '/main/posts' },
+  { id: 2, title: 'Расписание', icon: Calendar },
+  { id: 4, title: 'Программы', icon: List },
+  { id: 5, title: 'Список преподавателей', icon: Star },
+  
 ])
+const isProfilePage = computed(() => route.path === '/main/profile-content')
+const router = useRouter()
+const route = useRoute()
+const activeItem = ref(1)
 
 const handleItemClick = (item: any) => {
+  activeItem.value = item.id
   console.log('Выбран пункт:', item.title)
+  router.push(item.route)
 }
+
+watchEffect(() => {
+  if (isProfilePage.value) {
+    activeItem.value = 0 
+  } else {
+    const currentRoute = route.path
+    const item = items.value.find((item) => item.route === currentRoute)
+    activeItem.value = item ? item.id : 1 
+  }
+})
+
+watchEffect(() => {
+  const currentRoute = route.path
+  const item = items.value.find((item) => item.route === currentRoute)
+  activeItem.value = item ? item.id : 1
+})
 </script>
 
 <style scoped>
 .sidebar {
   width: 250px;
-  background-color: #f5f5f5;
-  padding: 20px;
-  border-right: 1px solid #ddd;
+  background: linear-gradient(to bottom, rgb(19, 67, 43), rgb(150, 236, 201));
+  padding: 20px 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
+
+.sidebar-header {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+  color: #ecf0f1;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
 </style>

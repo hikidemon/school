@@ -54,11 +54,12 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElNotification } from 'element-plus'
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ROUTE_NAMES, REQUIRED_RULE, PASSWORD_RULE, EMAIL_RULE } from '@/common/constants'
 import { authService } from '@/common/utils/AuthService'
 //import { jwtDecode } from 'jwt-decode'
+import { useAuthStore } from '@/store/AuthStore'
 
 const router = useRouter()
 const registrFormRef = ref<FormInstance>()
@@ -66,7 +67,7 @@ const authFormRef = ref<FormInstance>()
 const isLoading = ref(false)
 const isLoginDisabled = ref(true)
 const isRegistrDisabled = ref(true)
-const isRightPanelActive = ref(false)
+const authStore = useAuthStore()
 
 const auth = ref({
   email: '',
@@ -141,7 +142,7 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
           position: 'bottom-right',
         })
 
-        isRightPanelActive.value = false
+        authStore.togglePanel('signIn')
       } else {
         const [error] = await authService.login({
           email: auth.value.email,
@@ -182,8 +183,10 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
 }
 
 const togglePanel = (action: 'signUp' | 'signIn') => {
-  isRightPanelActive.value = action === 'signUp'
+  authStore.togglePanel(action)
 }
+
+const isRightPanelActive = computed(() => authStore.isRightPanelActive)
 </script>
 
 <style scoped>

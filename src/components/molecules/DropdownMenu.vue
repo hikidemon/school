@@ -9,7 +9,7 @@
       </div>
     </div>
     <ul>
-      <li class="dropdown-item" @click="handleItemClick('Личный кабинет')">
+      <li class="dropdown-item" @click="goToProfile">
         <span>Личный кабинет</span>
       </li>
       <li class="dropdown-item" @click="handleItemClick('Настройки')">
@@ -23,20 +23,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, defineProps, defineExpose } from 'vue'
+import { useRouter } from 'vue-router'
+import { ROUTE_NAMES } from '@/common/constants'
 
 const props = defineProps({
   avatarUrl: {
     type: String,
     required: true,
   },
+
 })
+const router = useRouter()
+
+const goToPosts = () => {
+  router.push({ name: ROUTE_NAMES.NewsContent })
+}
+
+const goToProfile = () => {
+  router.push({ name: ROUTE_NAMES.ProfileContent })
+  close()
+}
 
 const isOpen = ref(false)
 
 const handleItemClick = (item: string) => {
   console.log('Выбран пункт:', item)
   close()
+
+ 
 }
 
 const handleEditAvatar = () => {

@@ -1,33 +1,25 @@
-import type {  ServiceResponseType } from './AxiosService'
-import { AxiosService,API_CONFIG  } from './AxiosService'
+import type { ServiceResponseType } from './AxiosService'
+import { AxiosService, API_CONFIG } from './AxiosService'
+import { User } from '@/common/types/User'
 
 class UserService extends AxiosService {
-  public async getUser(userId: string): ServiceResponseType<{ name: string; email: string }> {
+  public async getUser(userId: string): ServiceResponseType<User> {
     const config = {
       method: 'GET',
       url: `/users/${userId}`,
     }
 
-    return this.axiosCall(config)
+    return this.axiosCall<User>(config)
   }
 
-  public async updateUser(userId: string, userData: { name: string; email: string }): ServiceResponseType<void> {
+  public async updateUser(userId: string, userData: Partial<User>): ServiceResponseType<User> {
     const config = {
       method: 'PUT',
       url: `/users/${userId}`,
       data: userData,
     }
-    
-    return this.axiosCall(config)
-  }
 
-  public async deleteUser(userId: string): ServiceResponseType<void> {
-    const config = {
-      method: 'DELETE',
-      url: `/users/${userId}`,
-    }
-    
-    return this.axiosCall(config)
+    return this.axiosCall<User>(config)
   }
 }
 

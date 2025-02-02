@@ -5,7 +5,7 @@ import '@/common/composables/usePermissions'
 
 import { vMaska } from 'maska/vue'
 import { createApp } from 'vue'
-
+import { createPinia } from 'pinia'
 import App from '@/App.vue'
 import router from '@/router'
 import ElementPlus, { dayjs } from 'element-plus'
@@ -15,6 +15,10 @@ dayjs.locale('ru')
 const app = createApp(App)
 
 app.use(ElementPlus)
+
+const pinia = createPinia()
+
+app.use(pinia)
 
 app.use(router)
 
