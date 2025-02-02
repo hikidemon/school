@@ -21,14 +21,13 @@ class AuthService extends AxiosService {
 
     return this.axiosCall(config)
   }
-  public async check(): ServiceResponseType<void> {
-    const config={
+  public async check<T = { id_role: string }>(): ServiceResponseType<T> {
+    return this.axiosCall<T>({
       method: 'GET',
       url: 'http://localhost:5000/api/identity/check',
-    }
-
-    return this.axiosCall(config)
+    })
   }
+  
 
   public async logout(): ServiceResponseType<void> {
     const config = {

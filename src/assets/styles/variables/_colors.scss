@@ -6,6 +6,7 @@ $color-black: #000;
 $color-primary: #36ac55;
 $color-primary-dark: #3d8263;
 $color-primary-light: #4effa7;
+$color-emerald:#1dd3af;
 $color-secondary: #fba0c9;
 $color-secondary-dark: #9e628c;
 $color-secondary-light: #ffbbeb;
@@ -28,5 +29,6 @@ $colors: (
   primary-light:$color-primary-light,
   secondary-dark:$color-secondary-dark,
   secondary-light:$color-secondary-light,
+  color-emerald:$color-emerald,
   
 );

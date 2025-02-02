@@ -3,7 +3,7 @@ import type { ServiceResponseType } from './AxiosService'
 import { ElNotification } from 'element-plus'
 import { ref } from 'vue'
 import { Post } from '../types/Post'
-
+import { authService } from './AuthService'
 
 export class PostService extends AxiosService {
   constructor() {
@@ -104,15 +104,23 @@ export class PostService extends AxiosService {
     }
   }
 
-  static async registerUserForEvent(postId: number, axiosService: AxiosService): Promise<void> {
+  async registerUserForEvent(postId: number): Promise<void> {
     try {
-      const isAuthorized = await this.checkUserAuthorization(axiosService)
+      const [authError, isAuthorized] = await authService.check()
 
-      if (!isAuthorized) return
+      if (authError) {
+        ElNotification({
+          title: 'Ошибка',
+          message: 'Вы не авторизованы. Пожалуйста, войдите в систему.',
+          type: 'error',
+          position: 'bottom-right',
+        })
+        return
+      }
 
-      const [error, userResponse] = await axiosService.axiosCall({
+      const [error, userResponse] = await this.axiosCall({
         method: 'GET',
-        url: '/user/info',  
+        url: '/user/info',
       })
 
       if (error) {
@@ -127,9 +135,9 @@ export class PostService extends AxiosService {
 
       const userId = userResponse?.data?.id
 
-      const [registerError] = await axiosService.axiosCall({
+      const [registerError] = await this.axiosCall({
         method: 'POST',
-        url: '/event/register',  
+        url: '/event/register',
         data: {
           userId,
           postId,
@@ -154,7 +162,6 @@ export class PostService extends AxiosService {
       })
     } catch (error) {
       console.error(error)
-      
       ElNotification({
         title: 'Ошибка',
         message: 'Произошла ошибка при регистрации!',
@@ -162,6 +169,30 @@ export class PostService extends AxiosService {
         position: 'bottom-right',
       })
     }
+  }
+  async likePost(postId: number): ServiceResponseType<void> {
+    return this.axiosCall<void>({
+      method: 'POST',
+      url: `/posts/${postId}/like`,
+    })
+  }
+  async unlikePost(postId: number): ServiceResponseType<void> {
+    return this.axiosCall<void>({
+      method: 'DELETE',
+      url: `/posts/${postId}/like`,
+    })
+  }
+  async checkLike(postId: number): ServiceResponseType<boolean> {
+    return this.axiosCall<boolean>({
+      method: 'GET',
+      url: `/posts/${postId}/like`,
+    })
+  }
+  async getLikeCount(postId: number): ServiceResponseType<number> {
+    return this.axiosCall<number>({
+      method: 'GET',
+      url: `/posts/${postId}/likes`,
+    })
   }
 }
 
