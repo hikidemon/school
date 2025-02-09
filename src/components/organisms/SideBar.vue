@@ -3,30 +3,30 @@
     <div class="sidebar-header">
       <h2>Меню</h2>
     </div>
-    <side-bar-item
-      v-for="item in items"
-      :key="item.id"
-      :title="item.title"
-      :icon="item.icon"
-      :active="activeItem === item.id"
-      @click="handleItemClick(item)"
-      :class="{ 'inactive': isProfilePage && item.id === 1 }"
-    />
+    <side-bar-item v-for="item in items" :key="item.id" :title="item.title" :icon="item.icon"
+      :active="activeItem === item.id" @click="handleItemClick(item)"
+      :class="{ 'inactive': isProfilePage && item.id === 1 }" />
   </el-aside>
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect,computed  } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
 import SideBarItem from '../molecules/SideBarItem.vue'
-import { Document, Calendar, Star, List } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from 'vue-router'
+import calendarstats from '@/assets/icons/calendarstats.svg'
+import clipboardlist from '@/assets/icons/clipboardlist.svg'
+import news from '@/assets/icons/news.svg'
+import userstar from '@/assets/icons/userstar.svg'
+
+
+
 
 const items = ref([
-  { id: 1, title: 'Новости', icon: Document , route: '/main/posts' },
-  { id: 2, title: 'Расписание', icon: Calendar },
-  { id: 4, title: 'Программы', icon: List },
-  { id: 5, title: 'Список преподавателей', icon: Star },
-  
+  { id: 1, title: 'Новости', icon: news, route: '/main/posts' },
+  { id: 2, title: 'Расписание', icon: calendarstats, route: '/main/schedule' },
+  { id: 3, title: 'Программы', icon: clipboardlist, route: '/main/programs' },
+  { id: 4, title: 'Список преподавателей', icon: userstar, route: '/main/teachers' },
+
 ])
 const isProfilePage = computed(() => route.path === '/main/profile-content')
 const router = useRouter()
@@ -41,22 +41,23 @@ const handleItemClick = (item: any) => {
 
 watchEffect(() => {
   if (isProfilePage.value) {
-    activeItem.value = 0 
+    activeItem.value = 0
   } else {
     const currentRoute = route.path
     const item = items.value.find((item) => item.route === currentRoute)
-    activeItem.value = item ? item.id : 1 
+    activeItem.value = item ? item.id : 1
   }
 })
 
 watchEffect(() => {
+
   const currentRoute = route.path
   const item = items.value.find((item) => item.route === currentRoute)
   activeItem.value = item ? item.id : 1
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .sidebar {
   width: 250px;
   background: linear-gradient(to bottom, rgb(19, 67, 43), rgb(150, 236, 201));
@@ -79,5 +80,4 @@ watchEffect(() => {
   font-weight: 600;
   margin: 0;
 }
-
 </style>

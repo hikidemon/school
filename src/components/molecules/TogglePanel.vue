@@ -2,14 +2,14 @@
   <div class="menu">
     <el-link href="#" class="link " @click.prevent="toggleView(false)" :class="{ active: isSelected === false }">
       <span class="link-icon">
-        <Document width="32" height="32" />
+        <calendarstats class="icon" />
       </span>
       <span class="link-title">Мероприятия</span>
     </el-link>
 
     <el-link href="#" class="link el-link" @click.prevent="toggleView(true)" :class="{ active: isSelected === true }">
       <span class="link-icon">
-        <Calendar width="32" height="32" />
+        <news class="icon" />
       </span>
       <span class="link-title">Расписание</span>
     </el-link>
@@ -18,11 +18,12 @@
 
 <script setup lang="ts">
 import { defineEmits, ref } from 'vue'
-import { Document, Calendar, Star, List } from '@element-plus/icons-vue'
+import calendarstats from '@/assets/icons/calendarstats.svg'
+import news from '@/assets/icons/news.svg'
 
 const emit = defineEmits(['toggle-view'])
 
-const isSelected = ref<boolean>(true) 
+const isSelected = ref<boolean>(true)
 
 const toggleView = (value: boolean) => {
   isSelected.value = value
@@ -30,15 +31,14 @@ const toggleView = (value: boolean) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .menu {
   padding: 0rem;
-  background-color: #fff;
   position: relative;
   display: flex;
   justify-content: center;
   border-radius: 15px;
-  box-shadow: 0 10px 25px 0 rgba(#000, 0.075);
+ 
 }
 
 .link {
@@ -75,7 +75,7 @@ const toggleView = (value: boolean) => {
   display: block;
   width: 100%;
   text-align: center;
-  margin-left: 8px; 
+  margin-left: 13px;
   transition: opacity 0.2s ease-in;
   opacity: 0;
   transform: translateX(100%);
@@ -89,28 +89,36 @@ const toggleView = (value: boolean) => {
 
 .active .link-icon,
 .active .link-title {
-  background-image: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  background-image: linear-gradient(90deg, $color-primary-gradient);
   animation: gradient-shift 4s linear infinite;
   background-clip: content-box;
   -webkit-background-clip: text;
-  color:#1abc9c;
+  color: $color-emerald;
 }
+
 .el-link {
-  border-bottom: none !important; 
-  outline: none !important; 
+  border-bottom: none !important;
+  outline: none !important;
   box-shadow: none !important;
 }
+
 .el-link:focus {
   outline: none !important;
   box-shadow: none !important;
-  border-bottom: none !important; 
-  border:none;
+  border-bottom: none !important;
+  border: none;
+}
+
+.icon {
+  height: 40px;
+  width: 40px;
 }
 
 @keyframes gradient-shift {
   0% {
     background-position: 0%;
   }
+
   100% {
     background-position: 100%;
   }

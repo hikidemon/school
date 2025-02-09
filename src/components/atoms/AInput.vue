@@ -1,14 +1,8 @@
 <template>
 
-    <el-input
-      v-model="localValue"
-      :type="type"
-      :placeholder="placeholder"
-      class="form_input w-100"
-      :show-password="showPassword"
-      
-    />
- 
+  <el-input v-model="localValue" :type="type" :placeholder="placeholder" class="form_input w-100"
+    :show-password="showPassword" />
+
 </template>
 
 <script setup lang="ts">
@@ -29,8 +23,8 @@ const props = defineProps({
     default: '',
   },
 
-  showPassword:{
-    type:Boolean,
+  showPassword: {
+    type: Boolean,
     default: false,
   },
 
@@ -57,7 +51,7 @@ watch(
 
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="scss" >
 .form_input {
   font-size: 1rem;
   box-shadow: $inner-shadow;
@@ -69,7 +63,7 @@ watch(
 }
 
 .label {
- 
+
   text-align: left;
   color: var(--color-black);
 }

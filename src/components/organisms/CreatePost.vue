@@ -27,23 +27,23 @@ const handleFormSubmit = async (post: Post) => {
         title: 'Успех',
         message: 'Пост успешно создан!',
         type: 'success',
-        duration: 5000, 
+        duration: 5000,
       })
     }
   } catch (error) {
     console.error('Ошибка:', error)
-    
+
     ElNotification({
       title: 'Ошибка',
       message: 'Произошла ошибка при отправке данных',
       type: 'error',
-      duration: 5000, 
+      duration: 5000,
     })
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .create-post-page {
   padding: 20px;
   max-width: 800px;

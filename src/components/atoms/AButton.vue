@@ -1,13 +1,6 @@
 <template>
-  <el-button
-    v-on="$attrs"
-    v-bind="$attrs"
-    round
-    :size="props.size"
-    :type="props.type"
-    class="mg-button el-button"
-    :class="{ 'no-border': props.noBorder }"
-  >
+  <el-button v-on="$attrs" v-bind="$attrs" round :size="props.size" :type="props.type" class="mg-button el-button"
+    :class="{ 'no-border': props.noBorder }">
     <slot name="default" />
   </el-button>
 </template>
@@ -26,26 +19,26 @@ const props = withDefaults(defineProps<Props>(), {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="scss" >
 .no-border {
-  border:1px;
+  border: 1px;
 }
 
 .el-button {
   --el-button-size: unset;
   --el-button-bg-color: var(--color-white);
-  --el-button-text-color: var(--color-primary);
+  --el-button-text-color: $color-primary;
   --el-border-radius-round: 44px;
-  background-color:var(--color-primary) ;
+  background-color: $color-primary;
   width: fit-content;
   display: block;
   border: none;
   font-weight: 500;
   text-align: center;
   transition:
-  box-shadow 0.3s ease,
-  color 0.3s ease,
-  background-color 0.3s ease;
+    box-shadow 0.3s ease,
+    color 0.3s ease,
+    background-color 0.3s ease;
 
   &:disabled {
     --el-button-text-color: var(--color-white);
@@ -54,7 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
   }
 
   &--primary {
-    --el-button-bg-color: var(--color-primary);
+    --el-button-bg-color: $color-primary;
     --el-button-text-color: var(--color-white);
     --el-button-hover-bg-color: var(--color-secondary);
     --el-button-active-bg-color: var(--color-secondary);
@@ -72,13 +65,13 @@ const props = withDefaults(defineProps<Props>(), {
     &:active {
       --el-button-bg-color: var(--color-secondary);
 
-      box-shadow: .3rem .3rem .6rem var(--greyLight-2), 
-      -.2rem -.2rem .5rem var(--white);
+      box-shadow: .3rem .3rem .6rem var(--greyLight-2),
+        -.2rem -.2rem .5rem var(--white);
     }
 
     &:disabled {
-      box-shadow:inset .2rem .2rem .5rem var(--greyLight-2), 
-      inset -.2rem -.2rem .5rem var(--white);
+      box-shadow: inset .2rem .2rem .5rem var(--greyLight-2),
+        inset -.2rem -.2rem .5rem var(--white);
     }
   }
 

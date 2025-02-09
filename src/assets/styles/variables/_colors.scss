@@ -2,7 +2,9 @@
 
 // colors
 $color-white: #fff;
-$color-black: #000;
+$color-white-dark:#f5f5f5;
+$color-black: #2c2c2c;
+$color-black-light:#333;
 $color-primary: #36ac55;
 $color-primary-dark: #3d8263;
 $color-primary-light: #4effa7;
@@ -11,8 +13,9 @@ $color-secondary: #fba0c9;
 $color-secondary-dark: #9e628c;
 $color-secondary-light: #ffbbeb;
 $color-dark:#1d2021;
-$lolor-primary-gredient: linear-gradient(90deg ,#03ff89, #48f2b9, #6dedc2);
+$color-primary-gradient:#03ff89, #48f2b9, #6dedc2;
 $animation-gradient: gradient-shift 4s linear infinite;
+$box-shadow: 0 0 20px rgba(80, 200, 144, 0.7),0 0 30px rgba(80, 200, 172, 0.5),0 0 50px rgba(80, 200, 164, 0.3);
 
 $shadow: .3rem .3rem .6rem var(--greyLight-2), 
 -.2rem -.2rem .5rem var(--white);
@@ -29,6 +32,10 @@ $colors: (
   primary-light:$color-primary-light,
   secondary-dark:$color-secondary-dark,
   secondary-light:$color-secondary-light,
-  color-emerald:$color-emerald,
+  emerald:$color-emerald,
+  primary-gradient:$color-primary-gradient,
+  black-light:$color-black-light,
+  white-dark:$color-white-dark,
+  box-shadow:$box-shadow,
   
-);
+);  

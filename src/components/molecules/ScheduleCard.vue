@@ -42,9 +42,9 @@ const daysOfWeek = computed(() => {
 
 const getScheduleForDay = (day: string) => {
   if (!schedule.value) {
-    return [] 
+    return []
   }
-  
+
   return schedule.value.filter(event => event.day === day)
 }
 
@@ -55,7 +55,7 @@ const fetchSchedule = async () => {
     if (error) throw error
     console.log(response)
 
-    if (response?.data ) {
+    if (response?.data) {
       console.log(response.data)
 
       schedule.value = response.data.data || defaultSchedule
@@ -74,26 +74,26 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .schedule-card {
   max-width: 900px;
   margin-left: -26%;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: $box-shadow;
   width: 152%;
 }
 
 .schedule-card__header {
   text-align: center;
   padding: 20px;
-  background: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  background: linear-gradient(90deg, $color-primary-gradient);
   animation: gradient-shift 4s linear infinite;
   border-radius: 12px 12px 0 0;
 }
 
 .schedule-card__header h2 {
   margin: 0;
-  color: white;
+  color: var(--color-white);
   font-size: 1.5rem;
 }
 
@@ -118,7 +118,7 @@ onMounted(() => {
 
 :deep(.el-table th) {
   background-color: #f5f7fa;
-  color: #333;
+  color: var(--color-black)-light;
   font-weight: bold;
 }
 
@@ -135,7 +135,7 @@ onMounted(() => {
 }
 
 :deep(.el-collapse-item__header.is-active) {
-  color: #1abc9c !important;
+  color: $color-emerald !important;
 }
 
 :deep(.el-collapse-item__header) {

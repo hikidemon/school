@@ -1,12 +1,6 @@
 <template>
-  <div
-    class="image-upload"
-    @dragover.prevent="isDragging = true"
-    @dragleave="isDragging = false"
-    @drop.prevent="handleDrop"
-    :class="{ 'dragging': isDragging }"
-    @click="openFileDialog"
-  >
+  <div class="image-upload" @dragover.prevent="isDragging = true" @dragleave="isDragging = false"
+    @drop.prevent="handleDrop" :class="{ 'dragging': isDragging }" @click="openFileDialog">
     <p v-if="!image">Перетащите изображение сюда или нажмите для загрузки</p>
     <img v-else :src="imagePreview" alt="Preview" class="image-preview" />
     <input type="file" @change="handleFileChange" accept="image/*" hidden ref="fileInput" />
@@ -61,26 +55,26 @@ const openFileDialog = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .image-upload {
-  border: 2px dashed var(--color-primary);
+  border: 2px dashed $color-primary;
   border-radius: 8px;
   padding: 20px;
   text-align: center;
   cursor: pointer;
-  background-color: #f5f5f5;
+  background-color: var(--color-white)-dark;
   transition: background-color 0.3s, border-color 0.3s;
   margin-bottom: 16px;
 }
 
 .image-upload.dragging {
-  background-color: var(--color-primary-light);
-  border-color: var(--color-primary);
+  background-color: $color-primary-light;
+  border-color: $color-primary;
 }
 
 .image-upload p {
   margin: 0;
-  color: var(--color-primary);
+  color: $color-primary;
   font-size: 14px;
 }
 

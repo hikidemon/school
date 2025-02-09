@@ -28,7 +28,7 @@ const toggleView = (value: boolean) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .main-layout {
   display: flex;
   padding: 20px;
@@ -37,12 +37,12 @@ const toggleView = (value: boolean) => {
 
 .left-side {
   width: 300px;
-  
+
 }
 
 .right-side {
   flex: 2;
-  margin-left: 40%;
+  margin-left: 325px;
   display: flex;
   flex-direction: column;
 }
@@ -52,11 +52,11 @@ const toggleView = (value: boolean) => {
   margin-bottom: 0px;
   width: 140%;
   margin-left: -20%;
-  }
+}
 
 .toggle-button {
   padding: 0px;
-  color: white;
+  color: var(--color-white);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -69,10 +69,10 @@ const toggleView = (value: boolean) => {
 }
 
 .content {
-  background: #ffffff;
+
   width: 500px;
   padding: 20px;
   border-radius: 8px;
- 
+
 }
 </style>

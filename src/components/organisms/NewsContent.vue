@@ -1,22 +1,11 @@
 <template>
-  <div class="main-content">
+  <div class="main-content ">
     <h1>Новости</h1>
     <div class="post-list">
-      <post-card
-        v-for="post in posts"
-        :key="post.id"
-        :id="post.id"
-        :title="post.title"
-        :content="post.content"
-        :image="post.image"
-        :date="post.date"
-        :type="post.type"
-        :likes="post.likes"
-        :is-liked-by-user="post.isLikedByUser"
-        @open="handleOpenPost(post)"
-        class="fade-in post-card"
-        @delete="handleDeletePost"
-      />
+      <post-card v-for="post in posts" :key="post.id" :id="post.id" :title="post.title" :content="post.content"
+        :image="post.image" :date="post.date" :type="post.type" :likes="post.likes"
+        :is-liked-by-user="post.isLikedByUser" @open="handleOpenPost(post)" class="fade-in post-card"
+        @delete="handleDeletePost" />
     </div>
   </div>
 </template>
@@ -27,6 +16,7 @@ import PostCard from '../molecules/PostCard.vue'
 import { postService } from '@/common/utils/PostService'
 import { Post } from '@/common/types/Post'
 import programsIcon from '@/assets/icons/3.png'
+import '@/assets/styles/_dark-theme.scss'
 
 const posts = ref<Post[]>([])
 
@@ -39,10 +29,12 @@ const fetchPosts = async () => {
     }
 
     if (response?.data?.data) {
-      posts.value = response.data.data.map((post: Post) => ({
-        ...post,
-        image: post.image
-      }))
+      posts.value = response.data.data
+        .map((post: Post) => ({
+          ...post,
+          image: post.image,
+        }))
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     } else {
       posts.value = getTestPosts()
     }
@@ -54,8 +46,9 @@ const fetchPosts = async () => {
 const handleOpenPost = (post: Post) => {
   console.log('Открыт пост:', post)
 }
+
 const handleDeletePost = (postId: number) => {
-  posts.value = posts.value.filter(post => post.id !== postId) 
+  posts.value = posts.value.filter(post => post.id !== postId)
 }
 
 const getTestPosts = (): Post[] => {
@@ -65,100 +58,100 @@ const getTestPosts = (): Post[] => {
       title: 'Тестовый пост 1',
       content: 'Это первый тестовый пост. Здесь может быть много текста.',
       image: programsIcon,
-      type:'event',
-      date:'2025-10-01',
-      likes:  10,
+      type: 'event',
+      date: '2025-10-01',
+      likes: 10,
       isLikedByUser: true
     },
     {
       id: 2,
       title: 'Тестовый пост 2',
       content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
-      image:  programsIcon,
-      date:'2025-10-01',
-      type:'news',
-      likes:  10,
-      isLikedByUser:false
+      image: programsIcon,
+      date: '2025-10-01',
+      type: 'news',
+      likes: 10,
+      isLikedByUser: false
     },
     {
       id: 3,
       title: 'Тестовый пост 2',
       content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
       image: programsIcon,
-      date:'2025-10-01',
-      type:'event',
-      likes:  10,
-      isLikedByUser:false
+      date: '2025-10-01',
+      type: 'event',
+      likes: 10,
+      isLikedByUser: false
     },
     {
       id: 4,
       title: 'Тестовый пост 2',
       content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
-      image:  programsIcon,
-      date:'2025-10-01',
-      type:'event',
-      likes:  10,
-      isLikedByUser:false
+      image: programsIcon,
+      date: '2025-10-01',
+      type: 'event',
+      likes: 10,
+      isLikedByUser: false
     },
     {
       id: 4,
       title: 'Тестовый пост 2',
       content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
-      image:  programsIcon,
-      date:'2025-10-01',
-      type:'event',
-      likes:  10,
-      isLikedByUser:false
+      image: programsIcon,
+      date: '2025-10-01',
+      type: 'event',
+      likes: 10,
+      isLikedByUser: false
     },
     {
       id: 4,
       title: 'Тестовый пост 2',
       content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
-      image:  programsIcon,
-      date:'2025-10-01',
-      type:'event',
-      likes:  10,
-      isLikedByUser:false
+      image: programsIcon,
+      date: '2025-10-01',
+      type: 'event',
+      likes: 10,
+      isLikedByUser: false
     },
     {
       id: 4,
       title: 'Тестовый пост 2',
       content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
-      image:  programsIcon,
-      date:'2025-10-01',
-      type:'event',
-      likes:  10,
-      isLikedByUser:false
+      image: programsIcon,
+      date: '2025-10-01',
+      type: 'event',
+      likes: 10,
+      isLikedByUser: false
     },
     {
       id: 4,
       title: 'Тестовый пост 2',
       content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
-      image:  programsIcon,
-      date:'2025-10-01',
-      type:'event',
-      likes:  10,
-      isLikedByUser:false
+      image: programsIcon,
+      date: '2025-10-01',
+      type: 'event',
+      likes: 10,
+      isLikedByUser: false
     },
     {
       id: 4,
       title: 'Тестовый пост 2',
       content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
-      image:  programsIcon,
-      date:'2025-10-01',
-      type:'event',
-      likes:  10,
-      isLikedByUser:false
+      image: programsIcon,
+      date: '2025-10-01',
+      type: 'event',
+      likes: 10,
+      isLikedByUser: false
     },
     {
       id: 4,
       title: 'Тестовый пост 2',
       content: 'Это второй тестовый пост. Здесь тоже может быть много текста.',
-      image:  programsIcon,
-      date:'2025-10-01',
-      type:'event',
-      likes:  10,
-      isLikedByUser:false
+      image: programsIcon,
+      date: '2025-10-01',
+      type: 'event',
+      likes: 10,
+      isLikedByUser: false
     },
   ]
 }
@@ -174,7 +167,7 @@ const setupIntersectionObserver = () => {
         }
       })
     },
-    { threshold: 0.3 } 
+    { threshold: 0.3 }
   )
 
   const postCards = document.querySelectorAll('.post-card')
@@ -191,17 +184,17 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .main-content {
   flex: 1;
   padding: 20px;
- 
+
 }
 
 h1 {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--color-black)-light;
 }
 
 .post-list {
@@ -210,7 +203,7 @@ h1 {
   gap: 10px;
   overflow-y: auto;
   max-height: 80vh;
- 
+
 }
 
 .post-card {
@@ -221,18 +214,10 @@ h1 {
 
 .post-card.fade-in-visible {
   opacity: 1;
-  transform: translateY(0); 
-}
-
-.post-card.fade-in-visible {
-  opacity: 1;
   transform: translateY(0);
 }
 
-.post-card.fade-in-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+
 
 .post-list::-webkit-scrollbar {
   display: none;

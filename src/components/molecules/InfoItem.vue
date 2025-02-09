@@ -1,19 +1,13 @@
 <template>
   <div class="info-item">
     <span class="info-item__label">{{ label }}:</span>
-    <el-input
-      v-if="isEditing"
-      v-model="localValue"
-      @blur="saveChanges"
-      @keyup.enter="saveChanges"
-      size="small"
-      :autosize="{ minRows: 1, maxRows: 5 }"
-      type="textarea"
-      class="info-item__input"
-    />
+    <el-input v-if="isEditing" v-model="localValue" @blur="saveChanges" @keyup.enter="saveChanges" size="small"
+      :autosize="{ minRows: 1, maxRows: 5 }" type="textarea" class="info-item__input" />
     <span v-else class="info-item__value">{{ value }}</span>
     <el-button class="info-item__edit" type="text" @click="startEditing">
-      <el-icon><edit /></el-icon>
+      <el-icon>
+        <edit />
+      </el-icon>
     </el-button>
   </div>
 </template>
@@ -46,7 +40,7 @@ const saveChanges = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .info-item {
   display: flex;
   align-items: center;
@@ -59,13 +53,13 @@ const saveChanges = () => {
 }
 
 .info-item:hover {
-  background: #f1f1f1;
+  background: var(--color-white)-dark;
 }
 
 .info-item__label {
   font-weight: bold;
   margin-right: 10px;
-  color: #1dd3af;
+  color: $color-emerald;
   white-space: nowrap;
 }
 
@@ -85,7 +79,7 @@ const saveChanges = () => {
 .info-item__edit {
   opacity: 0;
   transition: opacity 0.3s ease;
-  color:#1dd3af;
+  color: $color-emerald;
 }
 
 .info-item:hover .info-item__edit {

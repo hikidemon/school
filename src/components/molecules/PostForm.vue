@@ -67,12 +67,12 @@ const handleRegister = async () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .post-form {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #e3e5e4;
+  background-color: var(--color-white)-dark;
   border-radius: 8px;
 }
 
@@ -82,7 +82,7 @@ const handleRegister = async () => {
 
 .input-field {
   width: 100%;
-  border: 1px solid var(--color-primary);
+  border: 1px solid $color-primary;
   border-radius: 4px;
   font-size: 1rem;
   padding: 0px;
@@ -95,7 +95,7 @@ const handleRegister = async () => {
   display: flex;
   gap: 10px;
   margin-top: 0px;
-  margin:0 0 0 45px;
+  margin: 0 0 0 45px;
 }
 
 .radio-buttons label {
@@ -104,8 +104,8 @@ const handleRegister = async () => {
 }
 
 .submit-button {
-  background-color: var(--color-primary);
-  color: white;
+  background-color: $color-primary;
+  color: var(--color-white);
   padding: 10px 20px;
   border: none;
   font-size: 1rem;
@@ -114,10 +114,11 @@ const handleRegister = async () => {
   margin: 0 auto;
   margin-top: 20px;
 }
+
 .submit-button:hover,
 .submit-button:active {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  box-shadow: $box-shadow;
+  background: linear-gradient(90deg, $color-primary-gradient);
   animation: gradient-shift 4s linear infinite;
 }
 </style>

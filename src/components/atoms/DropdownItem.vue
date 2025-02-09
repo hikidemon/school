@@ -15,7 +15,7 @@ const handleClick = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .dropdown-item {
   padding: 10px 20px;
   cursor: pointer;
@@ -23,6 +23,6 @@ const handleClick = () => {
 }
 
 .dropdown-item:hover {
-  background-color: #f5f5f5;
+  background-color: var(--color-white)-dark;
 }
 </style>
