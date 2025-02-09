@@ -1,9 +1,9 @@
 <template>
   <div class="transition-container">
-    <div :class="{'fade-in': showSchedule, 'fade-out': !showSchedule}">
+    <div :class="{ 'fade-in': showSchedule, 'fade-out': !showSchedule }">
       <schedule-card v-if="showSchedule" />
     </div>
-    <div :class="{'fade-in': !showSchedule, 'fade-out': showSchedule}">
+    <div :class="{ 'fade-in': !showSchedule, 'fade-out': showSchedule }">
       <event-card v-if="!showSchedule" />
     </div>
     <div class="toggle-button-container">
@@ -24,7 +24,7 @@ const toggleScheduleView = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .transition-container {
   display: flex;
   flex-direction: column;
@@ -46,6 +46,7 @@ const toggleScheduleView = () => {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -57,6 +58,7 @@ const toggleScheduleView = () => {
     opacity: 1;
     transform: translateY(0);
   }
+
   100% {
     opacity: 0;
     transform: translateY(20px);
@@ -71,7 +73,7 @@ const toggleScheduleView = () => {
 button {
   padding: 10px 20px;
   background-color: #4CAF50;
-  color: white;
+  color: var(--color-white);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -82,21 +84,20 @@ button:hover {
   background-color: #45a049;
 }
 
-/* Убираем растяжение карточки вниз */
 .schedule-card,
 .event-card {
-  max-width: 600px; /* Ограничиваем максимальную ширину */
-  width: 100%; /* Карточка будет растягиваться по ширине */
-  margin: 10px 0; /* Добавляем отступ сверху и снизу */
+  max-width: 600px;
+  width: 100%;
+  margin: 10px 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   padding: 20px;
 }
 
-/* Применяем стиль для текста */
-.schedule-card h2, .event-card h2 {
+.schedule-card h2,
+.event-card h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--color-black)-light;
 }
 </style>

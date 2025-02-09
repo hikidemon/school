@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, onMounted,inject } from 'vue'
+import { Ref, ref, onMounted, inject } from 'vue'
 import { postService } from '@/common/utils/PostService'
 import { ElNotification } from 'element-plus'
 import { Post } from '@/common/types/Post'
@@ -28,7 +28,7 @@ import programsIcon from '@/assets/icons/3.png'
 
 const events = ref<Post[]>([])
 const registeredEvents = inject('registeredEvents') as Ref<number[]>
-const defaultEvent: Post[]=[
+const defaultEvent: Post[] = [
   {
     id: 1,
     title: 'Конференция Vue.js',
@@ -63,10 +63,10 @@ const fetchEvents = async () => {
 
     events.value = filteredEvents || defaultEvent
 
-    
+
   } catch (error) {
     console.error('Ошибка при загрузке мероприятий:', error)
-
+    events.value =  defaultEvent
     ElNotification({
       title: 'Ошибка',
       message: 'Не удалось загрузить мероприятия',
@@ -81,26 +81,26 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .event-card {
   max-width: 900px;
-  margin-left:-26%;
+  margin-left: -26%;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: $box-shadow;
   width: 152%;
 }
 
 .event-card__header {
   text-align: center;
   padding: 20px;
-  background: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  background: linear-gradient(90deg, $color-primary-gradient);
   animation: gradient-shift 4s linear infinite;
   border-radius: 12px 12px 0 0;
 }
 
 .event-card__header h2 {
   margin: 0;
-  color: white;
+  color: var(--color-white);
   font-size: 1.5rem;
 }
 
@@ -118,16 +118,16 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px; 
+  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
-  height: 120px; 
+  height: 120px;
 }
 
 .event-item:hover {
-  background-color: #f0f2f5;
+  background-color: var(--color-white)-dark;
 }
 
 .event-item__info {
@@ -157,13 +157,14 @@ onMounted(() => {
   font-size: 1rem;
   font-weight: normal;
   color: #888;
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 @keyframes gradient-shift {
   0% {
     background-position: 0%;
   }
+
   100% {
     background-position: 100%;
   }

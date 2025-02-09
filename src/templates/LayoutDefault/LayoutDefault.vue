@@ -18,7 +18,7 @@ const route = useRoute()
 const isHeaderShow = computed(() => route.name !== 'auth')
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="scss" lang="scss">
 .layout-default {
   width: 100%;
   height: 100%;

@@ -1,50 +1,52 @@
 <template>
-  <div class="container" :class="{ 'right-panel-active': isRightPanelActive }">
-    <div class="form-container sign-up-container">
-      <el-form ref="registrFormRef" :model="registr" label-position="top" :rules="registrRules" @submit.prevent>
-        <h1 class="h1">Регистрация</h1>
-        <el-form-item prop="email"  label="Почта" class="label">
-        <a-input v-model="registr.email"  placeholder="Email" type="email" class="styled-input w-100"
-         />
-        </el-form-item>
-        <el-form-item prop="password" label="Пароль" class="label">
-        <a-input v-model="registr.password" placeholder="Password"  
-          type="password" class="styled-input w-100" @blur="handleRegistrBlur" @input="handleRegistrBlur"
-          @change="handleRegistrBlur" :show-password="true"/>
-        </el-form-item>
-        <a-button class="styled-button w-100" style="margin-top: 15px" :disabled="isRegistrDisabled"
-          @click="handleFormSubmit('registr')">
-          Зарегистрироваться
-        </a-button>
-      </el-form>
+  <div class="component-wrapper">
+    <div class="stars-container">
+      <div v-for="n in 30" :key="n" class="star" :style="generateStarStyle()" />
     </div>
-    <div class="form-container sign-in-container">
-      <el-form ref="authFormRef" :model="auth" :rules="authRules" label-position="top" @submit.prevent>
-        <h1>Авторизация</h1>
-        <el-form-item label="Почта" prop="email" class="label">
-        <a-input v-model="auth.email" placeholder="Email" type="email" class="styled-input w-100"  />
-        </el-form-item>
-        <el-form-item prop="password" label="Пароль" class="label">
-        <a-input v-model="auth.password" placeholder="Password" :show-password="true"
-          type="password" class="styled-input w-100" @blur="handleAuthBlur" @input="handleAuthBlur"
-          @change="handleAuthBlur" />
-        </el-form-item>
-        <router-link :to="{ name: ROUTE_NAMES.FailPassword }" class="router-link">Забыли пароль?</router-link>
-        <a-button native-type="submit" class="styled-button w-100" :disabled="isLoginDisabled"
-          @click="handleFormSubmit('auth')">
-          Войти
-        </a-button>
-      </el-form>
-    </div>
-    <div class="overlay-container">
-      <div class="overlay">
-        <div class="overlay-panel overlay-left">
+    <div class="container" :class="{ 'right-panel-active': isRightPanelActive }">
+      <div class="form-container sign-up-container">
+        <el-form ref="registrFormRef" :model="registr" label-position="top" :rules="registrRules" @submit.prevent>
+          <h1 class="h1">Регистрация</h1>
+          <el-form-item prop="email" label="Почта" class="label">
+            <a-input v-model="registr.email" placeholder="Email" type="email" class="styled-input w-100" />
+          </el-form-item>
+          <el-form-item prop="password" label="Пароль" class="label">
+            <a-input v-model="registr.password" placeholder="Password" type="password" class="styled-input w-100"
+              @blur="handleRegistrBlur" @input="handleRegistrBlur" @change="handleRegistrBlur" :show-password="true" />
+          </el-form-item>
+          <a-button class="styled-button w-100" style="margin-top: 15px" :disabled="isRegistrDisabled"
+            @click="handleFormSubmit('registr')">
+            Зарегистрироваться
+          </a-button>
+        </el-form>
+      </div>
+      <div class="form-container sign-in-container">
+        <el-form ref="authFormRef" :model="auth" :rules="authRules" label-position="top" @submit.prevent>
           <h1>Авторизация</h1>
-          <a-button class="ghost styled-button" @click="togglePanel('signIn')"> Авторизоваться </a-button>
-        </div>
-        <div class="overlay-panel overlay-right">
-          <h1>Регистрация</h1>
-          <a-button class="ghost styled-button" @click="togglePanel('signUp')"> Зарегистрироваться </a-button>
+          <el-form-item label="Почта" prop="email" class="label">
+            <a-input v-model="auth.email" placeholder="Email" type="email" class="styled-input w-100" />
+          </el-form-item>
+          <el-form-item prop="password" label="Пароль" class="label">
+            <a-input v-model="auth.password" placeholder="Password" :show-password="true" type="password"
+              class="styled-input w-100" @blur="handleAuthBlur" @input="handleAuthBlur" @change="handleAuthBlur" />
+          </el-form-item>
+          <router-link :to="{ name: ROUTE_NAMES.FailPassword }" class="router-link">Забыли пароль?</router-link>
+          <a-button native-type="submit" class="styled-button w-100" :disabled="isLoginDisabled"
+            @click="handleFormSubmit('auth')">
+            Войти
+          </a-button>
+        </el-form>
+      </div>
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Авторизация</h1>
+            <a-button class="ghost styled-button" @click="togglePanel('signIn')"> Авторизоваться </a-button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Регистрация</h1>
+            <a-button class="ghost styled-button" @click="togglePanel('signUp')"> Зарегистрироваться </a-button>
+          </div>
         </div>
       </div>
     </div>
@@ -68,6 +70,21 @@ const isLoading = ref(false)
 const isLoginDisabled = ref(true)
 const isRegistrDisabled = ref(true)
 const authStore = useAuthStore()
+
+const generateStarStyle = () => {
+  const left = Math.random() * 100
+  const size = 5 + Math.random() * 10
+  const delay = Math.random() * 5
+  const duration = 3 + Math.random() * 4
+
+  return {
+    left: `${left}vw`,
+    width: `${size}px`,
+    height: `${size}px`,
+    animationDelay: `${delay}s`,
+    animationDuration: `${duration}s`,
+  }
+}
 
 const auth = ref({
   email: '',
@@ -189,20 +206,66 @@ const togglePanel = (action: 'signUp' | 'signIn') => {
 const isRightPanelActive = computed(() => authStore.isRightPanelActive)
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.component-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url('../../assets/icons/back3.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.stars-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+.star {
+  position: absolute;
+  top: -10px;
+  background: radial-gradient(circle, #89f5ad, transparent 70%);
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
+
 .label {
- 
- text-align: left;
- color: var(--color-black);
-  width:100%;
+
+  text-align: left;
+  color: var(--color-black);
+  width: 100%;
 }
 
 body {
   font-family: 'Stem-Italic', sans-serif;
-  background: #ffffff;
+  background: var(--color-white);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -211,6 +274,7 @@ body {
   margin-top: 20px;
   height: 100%;
   width: 100%;
+
 }
 
 button {
@@ -218,7 +282,7 @@ button {
 }
 
 a {
-  color: #333;
+  color: var(--color-black)-light;
   font-size: 14px;
   text-decoration: none;
   margin: 15px 0;
@@ -232,9 +296,7 @@ input {
 .container {
   background: #1d2021;
   border-radius: 10px;
-  box-shadow:
-    0 14px 28px rgba(0, 0, 0, 0.2),
-    0 10px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: $box-shadow;
   position: relative;
   overflow: hidden;
   width: 800px;
@@ -329,8 +391,8 @@ button.ghost {
 
 .overlay {
   background: #000000;
-  background: linear-gradient(to bottom, var(--color-primary), var(--color-primary-dark)) no-repeat 0 0 / cover;
-  color: #fff;
+  background: linear-gradient(to bottom, $color-primary, var(--color-primary-dark)) no-repeat 0 0 / cover;
+  color: var(--color-white);
   position: relative;
   left: -100%;
   height: 100%;
@@ -393,7 +455,7 @@ button.ghost {
 .styled-button:hover,
 .styled-button:active {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  background: linear-gradient(90deg, $color-primary-gradient);
   animation: gradient-shift 4s linear infinite;
 }
 
@@ -405,7 +467,7 @@ button.ghost {
 
 .router-link:hover,
 .router-link:active {
-  background-image: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  background-image: linear-gradient(90deg, $color-primary-gradient);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -417,7 +479,7 @@ h1::after {
   margin-top: 0;
   margin-bottom: 40px;
   font-size: clamp(1rem, 1rem + 2vw, 6rem);
-  background: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  background: linear-gradient(90deg, $color-primary-gradient );
   background-size: 500% 100%;
   animation: gradient-shift 4s linear infinite;
   color: transparent;

@@ -10,10 +10,11 @@ import EventCard from '@/components/molecules/EventCard.vue'
 defineProps<{ events: Array<{ id: number, title: string, image: string, date: string }> }>()
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .event-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
+  
 }
 </style>

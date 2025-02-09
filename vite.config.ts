@@ -9,6 +9,7 @@ import AutoImport from 'unplugin-vue-components/vite'
 import Components from 'unplugin-vue-components/vite'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import basicSsl from '@vitejs/plugin-basic-ssl'
+import svgLoader from 'vite-svg-loader'
 
 const autoImportConfig = AutoImport({
   resolvers: [ElementPlusResolver()],
@@ -32,6 +33,7 @@ export default defineConfig(({ mode }): UserConfig => {
       vueJsx(),
       svgLoader(),
       vueDevTools(),
+      svgLoader(),
       autoImportConfig,
       componentsConfig,
       basicSsl({

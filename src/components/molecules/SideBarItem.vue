@@ -1,9 +1,5 @@
 <template>
-  <div 
-    class="sidebar-item" 
-    :class="{ active }"
-    @click="handleClick"
-  >
+  <div class="sidebar-item" :class="{ active }" @click="handleClick">
     <el-icon class="icon" :size="20">
       <component :is="icon" />
     </el-icon>
@@ -27,7 +23,7 @@ const handleClick = () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .sidebar-item {
   display: flex;
   align-items: center;
@@ -39,7 +35,8 @@ const handleClick = () => {
   overflow: hidden;
 }
 
-.sidebar-item:hover, .sidebar-item.active {
+.sidebar-item:hover,
+.sidebar-item.active {
   background-color: rgba(79, 143, 111, 0.1);
 }
 
@@ -50,17 +47,20 @@ const handleClick = () => {
   top: 0;
   height: 100%;
   width: 3px;
-  background-color: var(--color-primary);
+  background-color: $color-primary;
   transform: scaleY(0);
   transition: transform 0.3s ease;
 }
 
-.sidebar-item:hover::before, .sidebar-item.active::before {
+.sidebar-item:hover::before,
+.sidebar-item.active::before {
   transform: scaleY(1);
 }
 
 .icon {
-  color: #ecf0f1;
+  color: var(--color-white);
+  width: 24px;
+  height: 24px;
 }
 
 .title {
@@ -70,7 +70,8 @@ const handleClick = () => {
   transition: color 0.3s ease;
 }
 
-.sidebar-item:hover .title, .sidebar-item.active .title {
-  color: var(--color-primary);  
+.sidebar-item:hover .title,
+.sidebar-item.active .title {
+  color: $color-primary;
 }
 </style>

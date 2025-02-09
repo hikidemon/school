@@ -13,11 +13,11 @@ import Avatar from '@/components/atoms/Avatar.vue'
 defineProps<{ user: { avatar: string, name: string, email: string, birthdate: string } }>()
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .profile-info {
   text-align: center;
   padding: 20px;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

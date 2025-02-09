@@ -11,51 +11,47 @@
           <div class="footer-left">
             <p class="card-date">{{ date }}</p>
             <div class="like-section" @click.stop="handleLike">
-              <svg
-                :class="['like-icon', { liked: isLiked }]"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="currentColor"
-              >
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 
-                4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              <svg :class="['like-icon', { liked: isLiked }]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                width="24" height="24" fill="currentColor">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 
+                4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
               </svg>
               <span class="like-count">{{ likeCount }}</span>
             </div>
           </div>
-          <div v-if="type === 'event' && !isRegistered"  class="register-button-container">
+          <div v-if="type === 'event' && !isRegistered" class="register-button-container">
             <a-button class="register-button" type="primary" @click.stop="handleRegister">
               Записаться
             </a-button>
           </div>
           <div v-else-if="type === 'event' && isRegistered" class="register-button-container">
-          <a-button class="register-button" type="primary" disabled>
-            Записан
-          </a-button>
-        </div>
+            <a-button class="register-button" type="primary" disabled>
+              Записан
+            </a-button>
+          </div>
         </div>
       </div>
     </div>
     <teleport to="body">
-    <div v-if="isOpen" class="modal-overlay" @click="closePost">
-      <div class="modal-content" @click.stop>
-        <img v-if="image" :src="image" alt="Post Image" class="modal-image" />
-        <h3 class="modal-title">{{ title }}</h3>
-        <p class="modal-date">{{ date }}</p>
-        <p class="modal-content-text">{{ content }}</p>
-        <el-icon class="modal-close" @click="closePost">
-          <close />
-        </el-icon>
+      <div v-if="isOpen" class="modal-overlay" @click="closePost">
+        <div class="modal-content" @click.stop>
+          <img v-if="image" :src="image" alt="Post Image" class="modal-image" />
+          <h3 class="modal-title">{{ title }}</h3>
+          <p class="modal-date">{{ date }}</p>
+          <p class="modal-content-text">{{ content }}</p>
+          <el-icon class="modal-close" @click="closePost">
+            <close />
+          </el-icon>
+        </div>
       </div>
-    </div>  </teleport>
+    </teleport>
   </div>
 
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted,provide } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 import { Delete, Close } from '@element-plus/icons-vue'
 import { ElNotification } from 'element-plus'
 import { postService } from '@/common/utils/PostService'
@@ -93,7 +89,7 @@ onMounted(async () => {
     if (!error && response?.data?.data?.id_role === 'admin') {
       isAdmin.value = true
     }
-    
+
   } catch (error) {
     console.error('Ошибка при проверке роли пользователя:', error)
   }
@@ -123,7 +119,7 @@ const handleRegister = async (): Promise<void> => {
       registeredEvents.value.push(props.id)
     }
     isRegistered.value = true
-   
+
   } catch (error) {
     console.error(error)
 
@@ -172,8 +168,8 @@ const handleLike = async () => {
 
 const handleDelete = async () => {
   try {
-    await postService.deletePost(props.id) 
-    emit('delete', props.id) 
+    await postService.deletePost(props.id)
+    emit('delete', props.id)
 
     ElNotification({
       title: 'Успех',
@@ -194,14 +190,14 @@ const handleDelete = async () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .post-card {
   width: 300px;
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s ease;
-  background-color: #fff;
+  background-color: var(--color-white);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -287,7 +283,7 @@ const handleDelete = async () => {
 
 .card-title {
   font-size: 1.2rem;
-  color: #333;
+  color: var(--color-black)-light;
   margin-bottom: 8px;
 }
 
@@ -301,18 +297,18 @@ const handleDelete = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; 
+  z-index: 1000;
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: var(--color-white);
   padding: 24px;
   border-radius: 12px;
   max-width: 500px;
-  width: 100%; 
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  box-shadow: $box-shadow;
   position: relative;
-  z-index: 1001; 
+  z-index: 1001;
 }
 
 .modal-image {
@@ -325,7 +321,7 @@ const handleDelete = async () => {
 
 .modal-title {
   font-size: 1.5rem;
-  color: #333;
+  color: var(--color-black)-light;
   margin-bottom: 8px;
 }
 
@@ -357,14 +353,14 @@ const handleDelete = async () => {
 }
 
 .register-button {
-  background-color: var(--color-primary);
-  color: white;
+  background-color: $color-primary;
+  color: var(--color-white);
 }
 
 .register-button:hover,
 .register-button:active {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  background: linear-gradient(90deg, $color-primary-gradient);
   animation: gradient-shift 4s linear infinite;
 }
 </style>

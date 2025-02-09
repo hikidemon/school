@@ -12,13 +12,15 @@ defineProps({
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .post-text {
   padding: 16px;
 }
+
 h3 {
   margin: 0 0 8px;
 }
+
 p {
   margin: 0;
 }

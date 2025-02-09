@@ -4,7 +4,7 @@
       <div class="avatar-wrapper">
         <img :src="avatarUrl" alt="Аватар" class="large-avatar" />
         <div class="edit-icon" @click="handleEditAvatar">
-          <span>✏️</span> 
+          <span>✏️</span>
         </div>
       </div>
     </div>
@@ -51,7 +51,7 @@ const handleItemClick = (item: string) => {
   console.log('Выбран пункт:', item)
   close()
 
- 
+
 }
 
 const handleEditAvatar = () => {
@@ -70,12 +70,12 @@ const close = () => {
 defineExpose({ open, close })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .dropdown-menu {
   position: absolute;
   top: 50px;
   right: 0;
-  background-color: white;
+  background-color: var(--color-white);
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -107,7 +107,7 @@ defineExpose({ open, close })
   position: absolute;
   bottom: 0;
   right: 0;
-  background-color: var(--color-primary);
+  background-color: $color-emerald;
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -119,12 +119,12 @@ defineExpose({ open, close })
 }
 
 .edit-icon:hover {
-  background-color: var(--color-primary);
+  background-color: $color-emerald;
 }
 
 .edit-icon span {
   font-size: 14px;
-  color: white;
+  color: var(--color-white);
 }
 
 ul {
@@ -140,11 +140,13 @@ ul {
 }
 
 .dropdown-item:hover {
-  background-color: #f5f5f5;
+  background-color: var(--color-white-dark);
+  border-radius: 12px;
 }
 
 .dropdown-item span {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-black-light);
+  border-radius: 12px;
 }
 </style>

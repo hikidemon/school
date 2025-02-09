@@ -8,24 +8,14 @@
     </div>
 
     <div class="user-card__basic-info">
-      <info-item
-        v-for="field in basicFields"
-        :key="field.key"
-        :label="field.label"
-        :value="user[field.key]"
-        @update="(value) => updateField(field.key as keyof User, value)"
-      />
+      <info-item v-for="field in basicFields" :key="field.key" :label="field.label" :value="user[field.key]"
+        @update="(value) => updateField(field.key as keyof User, value)" />
     </div>
 
     <el-collapse-transition>
       <div v-show="showDetails" class="user-card__details">
-        <info-item
-          v-for="field in additionalFields"
-          :key="field.key"
-          :label="field.label"
-          :value="user[field.key]"
-          @update="(value) => updateField(field.key as keyof User, value)"
-        />
+        <info-item v-for="field in additionalFields" :key="field.key" :label="field.label" :value="user[field.key]"
+          @update="(value) => updateField(field.key as keyof User, value)" />
       </div>
     </el-collapse-transition>
 
@@ -65,7 +55,7 @@ const showDetails = ref(false)
 const basicFields = computed(() => [
   { key: 'email', label: 'Email' },
   { key: 'phone', label: 'Телефон' },
-] as const) 
+] as const)
 
 const additionalFields = computed(() => [
   { key: 'address', label: 'Адрес' },
@@ -118,15 +108,14 @@ const updateField = async (field: keyof User, value: string) => {
 fetchUserProfile()
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .user-card {
   max-width: 600px;
   margin: auto;
   width: 170%;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+  box-shadow:$box-shadow;}
 
 .user-card__header {
   display: flex;
@@ -167,19 +156,22 @@ fetchUserProfile()
   padding: 5px;
   font-size: 1rem;
 }
+
 .user-card__button {
-  color: #1dd3af;
+  color: $color-emerald;
   font-size: 1rem;
   transition: color 0.3s ease;
 }
+
 .user-card__button:hover,
 .user-card__button:active {
-  background-image: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  background-image: linear-gradient(90deg, $color-primary-gradient);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   animation: gradient-shift 4s linear infinite;
 }
+
 h2,
 h2::after {
   margin-top: 0;
@@ -199,6 +191,7 @@ h2::after {
   left: 0;
   mix-blend-mode: darken;
 }
+
 @keyframes blend {
   to {
     background-position: 400% 100%;

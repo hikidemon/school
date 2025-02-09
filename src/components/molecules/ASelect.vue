@@ -25,15 +25,15 @@ const handleTypeChange = (value) => {
 
 const handleRegister = async () => {
   try {
-    await authService.check() 
-    router.push('/event-registration') 
+    await authService.check()
+    router.push('/event-registration')
   } catch (error) {
     alert('Вы должны быть авторизованы для записи на мероприятие!')
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .input-field {
   width: 100%;
   border-radius: 4px;
@@ -42,8 +42,8 @@ const handleRegister = async () => {
 }
 
 .submit-button {
-  background-color: var(--color-primary);
-  color: white;
+  background-color: $color-primary;
+  color: var(--color-white);
   padding: 10px 20px;
   border-radius: 4px;
   font-size: 1rem;
@@ -54,7 +54,7 @@ const handleRegister = async () => {
 }
 
 .submit-button:hover {
-  background: linear-gradient(90deg, #03ff89, #48f2b9, #6dedc2);
+  background: linear-gradient(90deg, $color-primary-gradient);
   background-size: 500% 100%;
   animation: gradient-shift 4s linear infinite;
 }
