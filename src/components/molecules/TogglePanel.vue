@@ -58,7 +58,6 @@ const toggleView = (value: boolean) => {
   border-bottom: 2px solid transparent;
  
 }
-
 .link:hover {
   width: auto;
   border-bottom: none;
@@ -73,7 +72,6 @@ const toggleView = (value: boolean) => {
   border-bottom: 2px solid transparent;
   color:$glass-accent-color;
 }
-
 .link-title {
   display: block;
   width: 100%;
