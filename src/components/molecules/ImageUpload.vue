@@ -1,18 +1,31 @@
 <template>
-  <div class="image-upload" @dragover.prevent="isDragging = true" @dragleave="isDragging = false"
-    @drop.prevent="handleDrop" :class="{ 'dragging': isDragging }" @click="openFileDialog">
-    <p v-if="!image">Перетащите изображение сюда или нажмите для загрузки</p>
-    <img v-else :src="imagePreview" alt="Preview" class="image-preview" />
-    <input type="file" @change="handleFileChange" accept="image/*" hidden ref="fileInput" />
+  <div
+    class="image-upload"
+    @dragover.prevent="isDragging = true"
+    @dragleave="isDragging = false"
+    @drop.prevent="handleDrop"
+    :class="{ dragging: isDragging }"
+    @click="openFileDialog"
+  >
+    <p v-if="!images.length">Перетащите изображения сюда или нажмите для загрузки</p>
+    <div v-else class="image-preview-container">
+      <div v-for="(image, index) in images" :key="index" class="image-preview-wrapper">
+        <img :src="image" alt="Preview" class="image-preview" />
+        <el-icon class="delete-icon" @click.stop="removeImage(index)">
+          <delete />
+        </el-icon>
+      </div>
+    </div>
+    <input type="file" @change="handleFileChange" accept="image/*" multiple hidden ref="fileInput" />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { Delete } from '@element-plus/icons-vue'
 
 const isDragging = ref(false)
-const image = ref(null)
-const imagePreview = ref(null)
+const images = ref([])
 const fileInput = ref(null)
 
 const emit = defineEmits(['upload'])
@@ -20,34 +33,38 @@ const emit = defineEmits(['upload'])
 const handleDrop = (e) => {
   isDragging.value = false
 
-  const file = e.dataTransfer.files[0]
+  const files = e.dataTransfer.files
 
-  if (file && file.type.startsWith('image/')) {
-    processImage(file)
+  if (files) {
+    processImages(files)
   }
 }
 
 const handleFileChange = (e) => {
-  const file = e.target.files[0]
+  const files = e.target.files
 
-  if (file && file.type.startsWith('image/')) {
-    processImage(file)
+  if (files) {
+    processImages(files)
   }
 }
 
-const processImage = (file) => {
-  const reader = new FileReader()
+const processImages = (files) => {
+  for (const file of files) {
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader()
 
-  reader.onload = (e) => {
+      reader.onload = (e) => {
+        images.value.push(e.target.result)
+        emit('upload', files)
+      }
 
-    imagePreview.value = e.target.result
-
-    image.value = file
-
-    emit('upload', file)
+      reader.readAsDataURL(file)
+    }
   }
+}
 
-  reader.readAsDataURL(file)
+const removeImage = (index) => {
+  images.value.splice(index, 1)
 }
 
 const openFileDialog = () => {
@@ -63,7 +80,9 @@ const openFileDialog = () => {
   text-align: center;
   cursor: pointer;
   background-color: var(--color-white)-dark;
-  transition: background-color 0.3s, border-color 0.3s;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
   margin-bottom: 16px;
 }
 
@@ -78,11 +97,32 @@ const openFileDialog = () => {
   font-size: 14px;
 }
 
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.image-preview-wrapper {
+  position: relative;
+}
+
 .image-preview {
   max-width: 100%;
   max-height: 200px;
   border-radius: 8px;
   margin-top: 10px;
   object-fit: contain;
+}
+
+.delete-icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  color: #ff4757;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  padding: 5px;
 }
 </style>

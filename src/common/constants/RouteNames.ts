@@ -3,6 +3,5 @@ export const ROUTE_NAMES: Record<string, string> = {
   AuthPage: 'auth',
   MainPage: 'main',
   ProfileContent: 'profile-content',
-  NotFoundPage: 'not-found',
-
+  NotFoundPage: 'not-found'
 }

@@ -1,10 +1,12 @@
 export interface Post {
-  id: number;
-  title: string;
-  content?: string;
-  date: string;
-  image?: string 
-  type?: string;
-  likes?:number
-  isLikedByUser?: boolean;
+  id: number | null
+  title: string
+  content: string
+  date: string
+  image: any[]
+  type: 'news' | 'event'
+  area:string
+  eventdate?: string
+  time: string
+  isRegistered?: boolean
 }

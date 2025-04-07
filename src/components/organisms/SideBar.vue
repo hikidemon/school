@@ -1,11 +1,23 @@
 <template>
-  <el-aside class="sidebar">
-    <div class="sidebar-header">
-      <h2>Меню</h2>
+  <el-aside :class="['sidebar', { collapsed }]">
+    <div class="toggle-button" @click="toggleSidebar">
+      <img
+        src="@/assets/icons/itemsidebar.png"
+        alt="toggle"
+        class="toggle-icon"
+        :class="{ rotated: collapsed }"
+      /> <div class="logo" v-show="!collapsed">Изумрудный город</div>
     </div>
-    <side-bar-item v-for="item in items" :key="item.id" :title="item.title" :icon="item.icon"
-      :active="activeItem === item.id" @click="handleItemClick(item)"
-      :class="{ 'inactive': isProfilePage && item.id === 1 }" />
+
+    <side-bar-item
+      v-for="item in items"
+      :key="item.id"
+      :title="collapsed ? '' : item.title"
+      :icon="item.icon"
+      :active="activeItem === item.id"
+      @click="handleItemClick(item)"
+      :class="[{ inactive: isProfilePage && item.id === 1 }, 'sidebar-item']"
+    />
   </el-aside>
 </template>
 
@@ -18,16 +30,22 @@ import clipboardlist from '@/assets/icons/clipboardlist.svg'
 import news from '@/assets/icons/news.svg'
 import userstar from '@/assets/icons/userstar.svg'
 
-
-
-
 const items = ref([
   { id: 1, title: 'Новости', icon: news, route: '/main/posts' },
   { id: 2, title: 'Расписание', icon: calendarstats, route: '/main/schedule' },
-  { id: 3, title: 'Программы', icon: clipboardlist, route: '/main/programs' },
-  { id: 4, title: 'Список преподавателей', icon: userstar, route: '/main/teachers' },
-
+  { id: 3, title: 'Мероприятия', icon: clipboardlist, route: '/main/events' },
+  { id: 4, title: 'Список преподавателей', icon: userstar, route: '/main/teacher' },
+  { id: 5, title: 'Список учеников', icon: userstar, route: '/main/student' },
+  { id: 6, title: 'Программы', icon: userstar, route: '/main/programs' },
+  { id: 7, title: 'Подмисывайся на VK', icon: userstar, route: '/main/programs' },
+  { id: 8, title: 'Получать уведомления через TG', icon: userstar, route: '/main/programs' },
 ])
+
+const collapsed = ref(false)
+const toggleSidebar = () => {
+  collapsed.value = !collapsed.value
+}
+
 const isProfilePage = computed(() => route.path === '/main/profile-content')
 const router = useRouter()
 const route = useRoute()
@@ -35,49 +53,72 @@ const activeItem = ref(1)
 
 const handleItemClick = (item: any) => {
   activeItem.value = item.id
-  console.log('Выбран пункт:', item.title)
   router.push(item.route)
 }
 
 watchEffect(() => {
-  if (isProfilePage.value) {
-    activeItem.value = 0
-  } else {
-    const currentRoute = route.path
-    const item = items.value.find((item) => item.route === currentRoute)
-    activeItem.value = item ? item.id : 1
-  }
-})
-
-watchEffect(() => {
-
   const currentRoute = route.path
   const item = items.value.find((item) => item.route === currentRoute)
-  activeItem.value = item ? item.id : 1
+  activeItem.value = isProfilePage.value ? 0 : item ? item.id : 1
 })
 </script>
 
 <style scoped lang="scss">
+.logo {
+  font-weight: bold;
+  justify-content: left;
+  margin-right: auto;
+  @include glass-text();
+  font-size: 1.5rem;
+
+  
+}
 .sidebar {
+  @include glass-content();
   width: 250px;
-  background: linear-gradient(to bottom, rgb(19, 67, 43), rgb(150, 236, 201));
+  transition: width 0.3s ease;
   padding: 20px 0;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
+
+  &.collapsed {
+    width: 70px;
+
+    .sidebar-item {
+      justify-content: center;
+    }
+
+    .toggle-icon {
+      transform: rotate(180deg);
+    }
+  }
 }
 
-.sidebar-header {
-  padding: 0 20px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
+.toggle-button {
+  padding: 4px;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
-.sidebar-header h2 {
-  color: #ecf0f1;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
+.toggle-icon {
+  width: 52px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  margin-top:0px;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 0 6px #50C878aa);
+}
+
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  
+  transition: all 0.3s ease;
 }
 </style>

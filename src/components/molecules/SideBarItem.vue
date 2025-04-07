@@ -13,7 +13,7 @@ import { ElIcon } from 'element-plus'
 defineProps({
   title: String,
   icon: Object,
-  active: Boolean,
+  active: Boolean
 })
 
 const emit = defineEmits(['click'])
@@ -24,7 +24,7 @@ const handleClick = () => {
 </script>
 
 <style scoped lang="scss">
-.sidebar-item {
+.sidebar-item { 
   display: flex;
   align-items: center;
   gap: 15px;
@@ -33,11 +33,13 @@ const handleClick = () => {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  
+ 
 }
 
 .sidebar-item:hover,
 .sidebar-item.active {
-  background-color: rgba(79, 143, 111, 0.1);
+  background-color: rgba(48, 219, 162, 0.1);
 }
 
 .sidebar-item::before {
@@ -47,7 +49,7 @@ const handleClick = () => {
   top: 0;
   height: 100%;
   width: 3px;
-  background-color: $color-primary;
+  background-color: $color-emerald;
   transform: scaleY(0);
   transition: transform 0.3s ease;
 }
@@ -57,21 +59,23 @@ const handleClick = () => {
   transform: scaleY(1);
 }
 
-.icon {
+.icon { @include glass-avatar();
   color: var(--color-white);
   width: 24px;
   height: 24px;
+ 
 }
 
 .title {
+  @include glass-text();
   font-size: 1rem;
-  color: #ecf0f1;
-  font-weight: 500;
+  color: var(--color-white);
+ 
   transition: color 0.3s ease;
 }
 
 .sidebar-item:hover .title,
 .sidebar-item.active .title {
-  color: $color-primary;
+  color: $color-emerald;
 }
 </style>

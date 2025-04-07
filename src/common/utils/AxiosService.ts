@@ -5,13 +5,13 @@ import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } fro
 import axios from 'axios'
 import useError from '@/common/composables/useError/useError'
 
-export type ApiResponseType<T = unknown[]> = {
+export type ApiResponseType<T = unknown> = {
   id: any
   data: T
 }
 
-type ApiErrorType<T = unknown> = {
-  data: T,
+export type ApiErrorType<T = unknown> = {
+  data: T
   message: string
 }
 
@@ -83,5 +83,5 @@ const getBaseUrl = (): string => {
 export const API_CONFIG: AxiosRequestConfig = {
   baseURL: getBaseUrl(),
   withCredentials: true,
-  timeout: 600000,
+  timeout: 600000
 }

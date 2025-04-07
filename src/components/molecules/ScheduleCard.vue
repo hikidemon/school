@@ -37,7 +37,7 @@ const activePanels = ref<string[]>([])
 const schedule = ref<ScheduleItem[]>([])
 
 const daysOfWeek = computed(() => {
-  return ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница']
+  return ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота','Воскресенье']
 })
 
 const getScheduleForDay = (day: string) => {
@@ -45,7 +45,7 @@ const getScheduleForDay = (day: string) => {
     return []
   }
 
-  return schedule.value.filter(event => event.day === day)
+  return schedule.value.filter((event) => event.day === day)
 }
 
 const fetchSchedule = async () => {
@@ -58,7 +58,7 @@ const fetchSchedule = async () => {
     if (response?.data) {
       console.log(response.data)
 
-      schedule.value = response.data.data || defaultSchedule
+      schedule.value = response.data.data.data || defaultSchedule
     }
   } catch (error) {
     console.error('Ошибка при загрузке расписания:', error)
@@ -76,10 +76,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .schedule-card {
+  @include glass-button();
   max-width: 900px;
   margin-left: -26%;
   border-radius: 12px;
-  box-shadow: $box-shadow;
   width: 152%;
 }
 
@@ -89,29 +89,34 @@ onMounted(() => {
   background: linear-gradient(90deg, $color-primary-gradient);
   animation: gradient-shift 4s linear infinite;
   border-radius: 12px 12px 0 0;
+  @include glass-button();
+
 }
 
 .schedule-card__header h2 {
-  margin: 0;
+ 
   color: var(--color-white);
+  @include glass-text();
   font-size: 1.5rem;
+
 }
 
 .schedule-card__content {
   padding: 20px;
-
 }
 
 .el-collapse-item {
   padding: 10px;
-
+  
 }
 
 .el-table {
   margin-top: 10px;
+  
 }
 
 .schedule-card__day {
+  
   font-size: 2rem;
   font-weight: bold;
 }
@@ -120,6 +125,8 @@ onMounted(() => {
   background-color: #f5f7fa;
   color: var(--color-black)-light;
   font-weight: bold;
+  font-size: 1rem;
+
 }
 
 :deep(.el-table tr) {
@@ -132,14 +139,18 @@ onMounted(() => {
 
 :deep(.el-table .el-table__row--striped) {
   background-color: #fafafa;
+  
 }
 
-:deep(.el-collapse-item__header.is-active) {
-  color: $color-emerald !important;
+:deep(.el-collapse-item__header) {
+  @include glass-button();
+
+  
 }
 
 :deep(.el-collapse-item__header) {
   font-size: 1.5rem;
   font-weight: bold;
+  
 }
 </style>

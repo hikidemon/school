@@ -30,9 +30,8 @@ import { ROUTE_NAMES } from '@/common/constants'
 const props = defineProps({
   avatarUrl: {
     type: String,
-    required: true,
-  },
-
+    required: true
+  }
 })
 const router = useRouter()
 
@@ -42,6 +41,7 @@ const goToPosts = () => {
 
 const goToProfile = () => {
   router.push({ name: ROUTE_NAMES.ProfileContent })
+
   close()
 }
 
@@ -49,13 +49,13 @@ const isOpen = ref(false)
 
 const handleItemClick = (item: string) => {
   console.log('Выбран пункт:', item)
+
   close()
-
-
 }
 
 const handleEditAvatar = () => {
   console.log('Редактирование аватарки')
+
   close()
 }
 
@@ -72,16 +72,23 @@ defineExpose({ open, close })
 
 <style scoped lang="scss">
 .dropdown-menu {
+  $primary: $glass-primary-color;
+  $secondary: $glass-secondary-color;
   position: absolute;
   top: 50px;
   right: 0;
-  background-color: var(--color-white);
-  border: 1px solid #ccc;
+  background: linear-gradient(
+    145deg,
+    rgba($secondary, 0.8) 0%,
+    rgba($primary, 0.9) 100%
+  );
+ 
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   min-width: 200px;
   padding: 16px;
+  
 }
 
 .avatar-section {
@@ -134,19 +141,22 @@ ul {
 }
 
 .dropdown-item {
+  @include glass-button();
   padding: 10px 16px;
   cursor: pointer;
   transition: background-color 0.3s;
+  border-radius: 12px;
+  border:none;
 }
 
 .dropdown-item:hover {
-  background-color: var(--color-white-dark);
+  
   border-radius: 12px;
 }
 
 .dropdown-item span {
   font-size: 0.9rem;
-  color: var(--color-black-light);
+  color: var(--color-black);
   border-radius: 12px;
 }
 </style>

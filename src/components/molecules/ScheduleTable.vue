@@ -1,209 +1,555 @@
 <template>
-  <table class="schedule-table">
-    <thead>
-      <tr>
-        <th class="table-header"/>
-        <th class="table-header group-header">
-          {{ groups[0] }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="day in days" :key="day">
-        <th class="table-header day-header">{{ day }}</th>
-        <td class="table-cell">
-          <div v-for="item in getScheduleForDayAndGroup(day, groups[0])" :key="item.time" class="schedule-item"
-            :class="{ editable: isEditable, 'edit-mode': item.isEditing }" @click="handleCellClick(item)">
-            <div v-if="!item.isEditing">
-              <div class="time">{{ item.time }}</div>
-              <div class="subject">{{ item.subject }}</div>
-              <div class="teacher">{{ item.teacher }}</div>
-            </div>
-            <div v-else class="edit-form">
-              <a-input v-model="item.time" placeholder="Время" />
-              <a-input v-model="item.subject" placeholder="Предмет" />
-              <a-input v-model="item.teacher" placeholder="Преподаватель" />
-              <a-button type="primary" @click="saveChanges(item)">Сохранить</a-button>
+  <div class="schedule-container">
+    <!-- Текущая неделя -->
+    <div class="current-week">
+      Текущая неделя: {{ currentWeek }}
+    </div>
+
+    <!-- Фильтры -->
+    <div class="filters">
+      <ASelectItem
+        v-model="selectedShift"
+        :options="shifts"
+        placeholder="Выберите смену"
+        @change="applyFilters"
+        class="select-filter"
+      />
+      <ASelectItem
+        v-model="selectedSubject"
+        :options="subjects"
+        placeholder="Выберите предмет"
+        @change="applyFilters"
+      />
+      <ASelectItem
+        v-model="selectedTeacher"
+        :options="teachers"
+        placeholder="Выберите преподавателя"
+        @change="applyFilters"
+      />
+    </div>
+
+    <!-- Основной контейнер с группами и расписанием -->
+    <div class="schedule-layout">
+      <!-- Колонка с группами -->
+      <div class="groups-column">
+        <div 
+          v-for="group in filteredGroups" 
+          :key="group.name"
+          class="group-item"
+          :class="{ 'active-group': openedGroup?.name === group.name }"
+          @click="toggleGroup(group)"
+        >
+          {{ group.name }}
+          <el-icon :class="{ 'rotate-icon': openedGroup?.name === group.name }">
+            <arrow-right />
+          </el-icon>
+        </div>
+      </div>
+
+      <!-- Колонка с расписанием -->
+      <div class="schedule-column">
+        <transition name="slide-fade">
+          <div v-if="openedGroup" class="schedule-details">
+            <div v-for="day in daysOfWeek" :key="day" class="day-column">
+              <div class="day-header" @click="openAddModal(day)">
+                {{ day }}
+              </div>
+              <div
+                v-for="lesson in openedGroup.schedule[day]"
+                :key="lesson.id"
+                class="lesson"
+                @click="openEditModal(lesson, day)"
+              >
+                <div class="lesson-content">
+                  <div class="time">{{ lesson.time }}</div>
+                  <div class="subject">{{ lesson.subject }}</div>
+                  <div class="teacher">{{ lesson.teacher }}</div>
+                </div>
+                <el-icon class="delete-icon" @click.stop="deleteLesson(lesson, day)">
+                  <delete />
+                </el-icon>
+              </div>
             </div>
           </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </transition>
+      </div>
+    </div>
+
+    <!-- Модальное окно для добавления/редактирования урока -->
+    <LessonModal
+      v-model:modelValue="isModalVisible"
+      :lesson="currentLesson"
+      :isEditMode="isEditMode"
+      @save="handleSaveLesson"
+      @delete="handleDeleteLesson"
+    />
+  </div>
 </template>
 
-
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ScheduleItem } from '@/common/types/ScheduleItem'
-import { ElMessage } from 'element-plus'
-import { scheduleService } from '@/common/utils/ScheduleService'
+import { ref, computed, watch, onMounted } from 'vue';
+import { ArrowRight, Delete } from '@element-plus/icons-vue';
+import LessonModal from './LessonModal.vue';
+import ASelectItem from '@/components/atoms/ASelectItem.vue';
+import { ScheduleItem } from '@/common/types/ScheduleItem';
+import gsap from 'gsap';
+import { scheduleService } from '@/common/utils/ScheduleService';
+import { ElNotification } from 'element-plus';
 
-const props = defineProps<{
-  days: string[];
-  groups: string[];
-  schedule: ScheduleItem[];
-  isEditable: boolean;
-}>()
-
-const getScheduleForDayAndGroup = (day: string, group: string) => {
-  return props.schedule
-    .filter((item) => item.day === day && item.group === group)
-    .map((item) => ({ ...item, isEditing: false }))
+interface Group {
+  name: string;
+  isOpen: boolean;
+  schedule: {
+    [day: string]: ScheduleItem[];
+  };
 }
 
-const handleCellClick = (item: ScheduleItem & { isEditing: boolean }) => {
-  if (props.isEditable) {
-    item.isEditing = true
-  }
-}
+const daysOfWeek = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'];
 
-const saveChanges = async (item: ScheduleItem & { isEditing: boolean }) => {
+const groups = ref<Group[]>([]);
+const openedGroup = ref<Group | null>(null);
+const isModalVisible = ref(false);
+const isEditMode = ref(false);
+const currentLesson = ref<ScheduleItem>({});
+const currentDay = ref<string>('');
+
+// Фильтры
+const selectedShift = ref<string | number>('');
+const selectedSubject = ref<string | number>('');
+const selectedTeacher = ref<string | number>('');
+
+const shifts = ref<{ value: string; label: string }[]>([]);
+const subjects = ref<{ value: string; label: string }[]>([]);
+const teachers = ref<{ value: string; label: string }[]>([]);
+
+const isUsingMockData = ref(false); // Флаг для использования моковых данных
+
+const currentWeek = computed(() => {
+  const now = new Date();
+  const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1));
+  const endOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 7));
+  return `${startOfWeek.toLocaleDateString()} - ${endOfWeek.toLocaleDateString()}`;
+});
+
+const filteredGroups = computed(() => {
+  return groups.value
+    .filter((group) => {
+      const matchesShift = !selectedShift.value || group.name.includes(selectedShift.value);
+      return matchesShift;
+    })
+    .map((group) => {
+      return {
+        ...group,
+        schedule: Object.fromEntries(
+          Object.entries(group.schedule).map(([day, lessons]) => [
+            day,
+            lessons.filter((lesson) => {
+              const matchesSubject = !selectedSubject.value || lesson.subject === selectedSubject.value;
+              const matchesTeacher = !selectedTeacher.value || lesson.teacher === selectedTeacher.value;
+              return matchesSubject && matchesTeacher;
+            }),
+          ])
+        ),
+      };
+    });
+});
+
+// Моковые данные
+const mockData = {
+  schedule: [
+    {
+      id: "1",
+      day: "Понедельник",
+      time: "09:00",
+      subject: "Математика",
+      teacher: "Иванов И.И.",
+      group: "Группа 1",
+    },
+    {
+      id: "2",
+      day: "Понедельник",
+      time: "10:00",
+      subject: "Физика",
+      teacher: "Петров П.П.",
+      group: "Группа 1",
+    },
+    {
+      id: "3",
+      day: "Вторник",
+      time: "09:00",
+      subject: "Химия",
+      teacher: "Сидоров С.С.",
+      group: "Группа 2",
+    },
+  ],
+  groups: ["Группа 1", "Группа 2"],
+  subjects: ["Математика", "Физика", "Химия", "Биология"],
+  teachers: ["Иванов И.И.", "Петров П.П.", "Сидоров С.С.", "Кузнецов К.К."],
+};
+
+// Загрузка данных
+const loadData = async () => {
   try {
-    const [error] = await scheduleService.updateScheduleItem(item)
+    const response = await scheduleService.getAllData();
+    
+    if (response.data.data) {
+      groups.value = response.data.groups.map(group => ({
+        name: group,
+        isOpen: false,
+        schedule: daysOfWeek.reduce((acc, day) => {
+          acc[day] = response.data.schedule.filter(item => item.group === group && item.day === day);
+          return acc;
+        }, {} as { [day: string]: ScheduleItem[] }),
+      }));
 
-    if (error) throw error
-
-    ElMessage.success('Изменения сохранены')
-    item.isEditing = false
+      shifts.value = response.data.groups.map(group => ({ value: group, label: group }));
+      subjects.value = response.data.subjects.map(subject => ({ value: subject, label: subject }));
+      teachers.value = response.data.teachers.map(teacher => ({ value: teacher, label: teacher }));
+    }
   } catch (error) {
-    console.error('Ошибка при сохранении изменений:', error)
-    ElMessage.error('Не удалось сохранить изменения')
+    console.error('Ошибка при загрузке данных:', error);
+    isUsingMockData.value = true;
+
+    // Используем моковые данные
+    groups.value = mockData.groups.map(group => ({
+      name: group,
+      isOpen: false,
+      schedule: daysOfWeek.reduce((acc, day) => {
+        acc[day] = mockData.schedule.filter(item => item.group === group && item.day === day);
+        return acc;
+      }, {} as { [day: string]: ScheduleItem[] }),
+    }));
+
+    shifts.value = mockData.groups.map(group => ({ value: group, label: group }));
+    subjects.value = mockData.subjects.map(subject => ({ value: subject, label: subject }));
+    teachers.value = mockData.teachers.map(teacher => ({ value: teacher, label: teacher }));
+
+    // Уведомление пользователю
+    ElNotification({
+      title: 'Ошибка',
+      message: 'Сервер недоступен. Используются локальные данные.',
+      type: 'warning',
+    });
+  }
+};
+
+
+// Обновление openedGroup при изменении фильтров
+watch(filteredGroups, (newFilteredGroups) => {
+  if (openedGroup.value) {
+    const updatedGroup = newFilteredGroups.find((group) => group.name === openedGroup.value?.name);
+    if (updatedGroup) {
+      openedGroup.value = { ...updatedGroup, isOpen: true };
+    }
+  }
+});
+
+function toggleGroup(group: Group) {
+  group.isOpen = !group.isOpen;
+  openedGroup.value = group.isOpen ? group : null;
+  animateGroup(group);
+}
+
+function animateGroup(group: Group) {
+  if (group.isOpen) {
+    gsap.from('.schedule-details', {
+      opacity: 0,
+      y: 20,
+      duration: 0.5,
+      ease: 'power2.out',
+    });
   }
 }
+
+function openAddModal(day: string) {
+  currentLesson.value = { day, time: '', subject: '', teacher: '', group: selectedShift.value };
+  currentDay.value = day;
+  isEditMode.value = false;
+  isModalVisible.value = true;
+}
+
+function openEditModal(lesson: ScheduleItem, day: string) {
+  currentLesson.value = { ...lesson };
+  currentDay.value = day;
+  isEditMode.value = true;
+  isModalVisible.value = true;
+}
+
+function deleteLesson(lesson: ScheduleItem, day: string) {
+  if (openedGroup.value) {
+    openedGroup.value.schedule[day] = openedGroup.value.schedule[day].filter(
+      (l) => l.id !== lesson.id
+    );
+  }
+}
+
+function handleSaveLesson(lesson: ScheduleItem) {
+  if (openedGroup.value && currentDay.value) {
+    if (isEditMode.value) {
+      // Редактирование урока
+      const lessons = openedGroup.value.schedule[currentDay.value];
+      const index = lessons.findIndex((l) => l.id === lesson.id);
+      if (index !== -1) {
+        lessons[index] = { ...lesson };
+      }
+    } else {
+      // Добавление урока
+      lesson.id = String(Math.random()); // Генерация уникального ID
+      openedGroup.value.schedule[currentDay.value].push({ ...lesson });
+    }
+  }
+}
+
+function handleDeleteLesson() {
+  if (openedGroup.value && currentDay.value) {
+    openedGroup.value.schedule[currentDay.value] = openedGroup.value.schedule[
+      currentDay.value
+    ].filter((l) => l.id !== currentLesson.value.id);
+  }
+}
+
+function applyFilters() {
+  console.log('Применены фильтры:', {
+    shift: selectedShift.value,
+    subject: selectedSubject.value,
+    teacher: selectedTeacher.value,
+  });
+}
+
+// Загрузка данных при монтировании компонента
+onMounted(async () => {
+
+ 
+  loadData()
+  });
 </script>
 
 <style scoped lang="scss">
-.schedule-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0px 0;
-  background: white;
+.schedule-container {
+  padding: 20px;
+  background-color: var(--color-white)-dark;
   border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: auto;
+ 
 }
 
-.table-header {
-  padding: 12px;
-  text-align: center;
+
+.current-week {
+ 
+  font-size: 1.2rem;
   font-weight: bold;
-  color: var(--color-white);
-  background: #81c5aa;
+  margin-bottom: 20px;
+  color: var(--color-emerald);
+  $size: 2.2rem;
+  $weight: 800;
+  $thickness: $glass-thickness;
+  $color: $glass-text-color;
+  $glow-color: $glass-accent-color;
+  $font-family: $glass-font-family;
+ 
+  --glass-text-hue-rotate: 0deg;
+  --glass-text-brightness: 1;
+  
+  font-family: $font-family;
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+  display: inline-block;
+  position: relative;
+  text-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.3),
+    0 -1px 0 rgba(0, 0, 0, 0.7),
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 4px 8px rgba($glow-color, 0.3),
+    0 8px 16px rgba($glow-color, 0.2);
+  
+  &::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: rgba($glow-color, 0.7);
+    z-index: -1;
+    transform: translateZ(-$thickness/2);
+    filter: 
+      blur(1px)
+      hue-rotate(var(--glass-text-hue-rotate))
+      brightness(var(--glass-text-brightness));
+    text-shadow: 
+      0 0 10px rgba($glow-color, 0.7),
+      0 0 20px rgba($glow-color, 0.5),
+      0 0 30px rgba($glow-color, 0.3);
+  }
+  color:var(--color-black)-light;
 }
 
-.group-header {
-  background: #81c5aa;
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.schedule-layout {
+  display: flex;
+  gap: 20px;
+}
+
+.groups-column {
   width: auto;
+  border-right: 1px solid var(--color-black)-light;
+  padding-right: 20px;
+  height: auto;
+}
+
+.group-item {
+  @include glass-button();
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+   
+    transform: translateY(-2px);
+  }
+
+  &.active-group {
+    background-color: var(--color-emerald);
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.schedule-column {
+  flex: 1;
+  min-height: 500px;
+}
+
+.schedule-details {
+  display: flex;
+  padding: 10px;
+  background-color: var(--color-white)-dark;
+  border-radius: 8px;
+
+  @include card-style();
+
+}
+
+.day-column {
+  flex: 1;
+  margin-right: 10px;
+
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
 .day-header {
-  height: auto;
-  width:300px;
-  background: #81c5aa;
-}
-
-.table-cell {
-  border: 1px solid #e0e0e0;
-  padding: 8px;
-  vertical-align: top;
-}
-
-.schedule-item {
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 4px 0;
-  background: #f9f9f9;
-  border-radius: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  border: 1px solid $color-white-dark;
-}
-.schedule-item div {
-  flex: 1; 
-  text-align: center; 
-}
-
-.schedule-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.schedule-item.editable {
-  cursor: pointer;
-}
-
-.schedule-item.edit-mode {
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  position: relative;
-}
-
-.schedule-item.edit-mode::before {
-  content: "";
-  position: absolute;
-  top: -160px;
-  left: -160px;
-  right: -160px;
-  bottom: -160px;
-  border-radius: 13px;
-  background: conic-gradient(from 0deg,
-      $color-primary-gradient, $color-primary-gradient);
-  z-index: -1;
-  animation: rotate 4s linear infinite;
-}
-
-.schedule-item.edit-mode::after {
-  content: "";
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  border-radius: 13px;
-  background: conic-gradient(from 0deg,
-      $color-primary-gradient, $color-primary-gradient);
-  z-index: -2;
-  filter: blur(8px);
-  opacity: 0.7;
-  animation: rotate 4s linear infinite;
-}
-
-.edit-form {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.time {
   font-weight: bold;
-  color: var(--color-black-light);
-  flex: 0.5; 
-  text-align: left;
-}
-
-.subject {
-  font-size:1.2rem;
-  color: var(--color-black-light);
-}
-
-.teacher {
-  font-size: 0.9rem;
-  color: var(--color-black-light);
-  flex: 1; 
-  text-align: right;
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
+  margin-bottom: 10px;
+  color: var(--color-black)-light;
+  cursor: pointer;
+  transition: color 0.3s, transform 0.3s;
+  $size: 2.2rem;
+  $weight: 800;
+  $thickness: $glass-thickness;
+  $color: $glass-text-color;
+  $glow-color: $glass-accent-color;
+  $font-family: $glass-font-family;
+ 
+  --glass-text-hue-rotate: 0deg;
+  --glass-text-brightness: 1;
+  
+  font-family: $font-family;
+  font-size: $size;
+  font-weight: $weight;
+  
+  display: inline-block;
+  position: relative;
+  text-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.3),
+ 
+    0 4px 8px rgba($glow-color, 0.3),
+    0 8px 16px rgba($glow-color, 0.2);
+  
+  &::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: rgba($glow-color, 0.7);
+    z-index: -1;
+    transform: translateZ(-$thickness/2);
+    filter: 
+      blur(1px)
+      hue-rotate(var(--glass-text-hue-rotate))
+      brightness(var(--glass-text-brightness));
+    text-shadow: 
+      0 0 10px rgba($glow-color, 0.7),
+      0 0 20px rgba($glow-color, 0.5),
+      0 0 30px rgba($glow-color, 0.3);
   }
+  
+ 
+  font-size:medium;
 
-  100% {
-    transform: rotate(360deg);
+  &:hover {
+    color: #0d8c5f;
+    transform: translateY(-2px);
   }
+}
+
+.lesson {
+  
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #73edc4;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  @include glass-button();
+
+
+}
+
+.lesson-content {
+  flex: 1;
+}
+
+.delete-icon {
+  cursor: pointer;
+  color: #ff4444;
+  transition: color 0.3s, transform 0.3s;
+
+  &:hover {
+    color: #cc0000;
+    transform: scale(1.1);
+  }
+}
+
+.rotate-icon {
+  transform: rotate(90deg);
+  transition: transform 0.3s;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>

@@ -7,7 +7,6 @@
         <router-view />
       </div>
     </div>
-
   </div>
 </template>
 
@@ -27,8 +26,6 @@ const isDarkTheme = inject('isDarkTheme')
 onMounted(() => {
   router.push({ name: ROUTE_NAMES.NewsContent })
 })
-
-
 </script>
 
 <style scoped lang="scss">

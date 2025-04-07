@@ -1,4 +1,3 @@
-/* eslint-env node */
 require('@rushstack/eslint-patch/modern-module-resolution')
 
 module.exports = {
@@ -9,28 +8,25 @@ module.exports = {
   parserOptions: {
     ecmaFeatures: { jsx: true },
     sourceType: 'module',
-    ecmaVersion: 'latest',
+    ecmaVersion: 'latest'
   },
 
   extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
     '@vue/eslint-config-typescript',
-    '@vue/eslint-config-prettier/skip-formatting',
-    
-    
+    '@vue/eslint-config-prettier/skip-formatting'
   ],
 
   globals: {
-    process: true,
+    process: true
   },
 
   rules: {
-    // 'no-explicit-any': 1,
     semi: ['error', 'never'],
     quotes: ['error', 'single'],
     'no-useless-constructor': 'off',
-    'linebreak-style': ['error', 'windows'],
+    'linebreak-style': ['error', 'unix'],
     'object-curly-spacing': ['error', 'always', { objectsInObjects: true }],
     'padding-line-between-statements': [
       'warn',
@@ -48,7 +44,7 @@ module.exports = {
       { blankLine: 'always', prev: '*', next: 'export' },
       { blankLine: 'always', prev: 'export', next: '*' },
       { blankLine: 'always', prev: '*', next: 'function' },
-      { blankLine: 'always', prev: 'try', next: '*' },
+      { blankLine: 'always', prev: 'try', next: '*' }
     ],
 
     'max-len': [
@@ -58,8 +54,8 @@ module.exports = {
         tabWidth: 2,
         ignoreComments: true,
         ignoreTrailingComments: true,
-        ignoreUrls: true,
-      },
+        ignoreUrls: true
+      }
     ],
 
     'vue/no-v-html': 'off',
@@ -70,18 +66,17 @@ module.exports = {
     'vue/component-name-in-template-casing': ['error', 'kebab-case', { ignores: [] }],
     'vue/v-on-event-hyphenation': ['error', 'always', { ignore: ['update:modelValue'] }],
     'vue/padding-line-between-blocks': ['warn', 'always'],
-
     'vue/html-self-closing': [
       'error',
       {
         html: {
           void: 'any',
           normal: 'always',
-          component: 'always',
+          component: 'always'
         },
         svg: 'always',
-        math: 'always',
-      },
-    ],
-  },
+        math: 'always'
+      }
+    ]
+  }
 }

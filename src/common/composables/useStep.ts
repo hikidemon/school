@@ -18,6 +18,6 @@ export const useStep = () => {
 
   return {
     currentStep: readonly(currentStep),
-    setStep,
+    setStep
   }
 }

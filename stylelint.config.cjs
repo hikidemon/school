@@ -3,14 +3,14 @@ module.exports = {
     'stylelint-config-standard-scss', // Configure for SCSS
     'stylelint-config-recommended-vue', // Add overrides for .Vue files
     'stylelint-config-recess-order', // Use the recess order for properties
-    'stylelint-config-css-modules', // Configure for CSS Modules methodology
+    'stylelint-config-css-modules' // Configure for CSS Modules methodology
   ],
 
   plugins: [],
 
   overrides: [
     { files: ['**/*.scss'], customSyntax: 'postcss-scss' },
-   { files: ['**/*.vue'], customSyntax: 'postcss-html' },
+    { files: ['**/*.vue'], customSyntax: 'postcss-html' }
   ],
 
   rules: {
@@ -20,7 +20,7 @@ module.exports = {
       {
         type: 'at-rule',
         name: 'include',
-        hasBlock: false,
+        hasBlock: false
       },
       'declarations',
       { type: 'rule', selector: '&::before' },
@@ -42,8 +42,8 @@ module.exports = {
       {
         type: 'at-rule',
         name: 'include',
-        hasBlock: true,
-      },
+        hasBlock: true
+      }
     ],
 
     'order/properties-alphabetical-order': null,
@@ -413,9 +413,9 @@ module.exports = {
         'overflow-wrap',
         'visibility',
         'opacity',
-        'z-index',
+        'z-index'
       ],
-      { unspecified: 'bottomAlphabetical' },
+      { unspecified: 'bottomAlphabetical' }
     ],
 
     'unit-no-unknown': true,
@@ -456,14 +456,14 @@ module.exports = {
     'comment-whitespace-inside': 'always',
     'comment-empty-line-before': [
       'always',
-      { except: ['first-nested'], ignore: ['after-comment', 'stylelint-commands'] },
+      { except: ['first-nested'], ignore: ['after-comment', 'stylelint-commands'] }
     ],
 
     'custom-media-pattern': null,
     'custom-property-pattern': null,
     'custom-property-empty-line-before': [
       'always',
-      { except: ['after-custom-property', 'first-nested'], ignore: ['after-comment', 'inside-single-line-block'] },
+      { except: ['after-custom-property', 'first-nested'], ignore: ['after-comment', 'inside-single-line-block'] }
     ],
 
     'declaration-block-no-duplicate-properties': true,
@@ -472,7 +472,7 @@ module.exports = {
     'declaration-block-single-line-max-declarations': 0,
     'declaration-empty-line-before': [
       'always',
-      { except: ['after-declaration', 'first-nested'], ignore: ['after-comment', 'inside-single-line-block'] },
+      { except: ['after-declaration', 'first-nested'], ignore: ['after-comment', 'inside-single-line-block'] }
     ],
     'declaration-no-important': null,
 
@@ -535,7 +535,7 @@ module.exports = {
     'scss/dollar-variable-pattern': null,
     'scss/double-slash-comment-empty-line-before': [
       'always',
-      { except: ['first-nested'], ignore: ['between-comments', 'stylelint-commands'] },
+      { except: ['first-nested'], ignore: ['between-comments', 'stylelint-commands'] }
     ],
     'scss/double-slash-comment-inline': null,
     'scss/double-slash-comment-whitespace-inside': null,
@@ -545,6 +545,6 @@ module.exports = {
     'scss/operator-no-unspaced': true,
     'scss/partial-no-import': null,
     'scss/percent-placeholder-pattern': null,
-    'scss/selector-no-redundant-nesting-selector': true,
-  },
+    'scss/selector-no-redundant-nesting-selector': true
+  }
 }

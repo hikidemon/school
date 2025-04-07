@@ -16,6 +16,6 @@ export default function useError() {
     isShow: readonly(isShow),
     errorMessage: readonly(errorMessage),
     setErrorShow,
-    setErrorMessage,
+    setErrorMessage
   }
 }

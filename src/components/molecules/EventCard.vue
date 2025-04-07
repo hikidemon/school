@@ -33,20 +33,20 @@ const defaultEvent: Post[] = [
     id: 1,
     title: 'Конференция Vue.js',
     date: '2022-07-15',
-    image: programsIcon,
+    image: programsIcon
   },
   {
     id: 2,
     title: 'Конференция React.js',
     date: '2022-07-15',
-    image: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+    image: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
   },
   {
     id: 3,
     title: 'Конференция Angular.js',
     date: '2022-07-15',
-    image: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-  },
+    image: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+  }
 ]
 
 const fetchEvents = async () => {
@@ -57,21 +57,19 @@ const fetchEvents = async () => {
       throw error
     }
 
-    const filteredEvents = response?.data.data.filter((event: Post) =>
-      registeredEvents.value.includes(event.id)
-    )
+    const filteredEvents = response?.data.data.filter((event: Post) => registeredEvents.value.includes(event.id))
 
     events.value = filteredEvents || defaultEvent
-
-
   } catch (error) {
     console.error('Ошибка при загрузке мероприятий:', error)
-    events.value =  defaultEvent
+
+    events.value = defaultEvent
+
     ElNotification({
       title: 'Ошибка',
       message: 'Не удалось загрузить мероприятия',
       type: 'error',
-      position: 'bottom-right',
+      position: 'bottom-right'
     })
   }
 }
@@ -88,6 +86,7 @@ onMounted(() => {
   border-radius: 12px;
   box-shadow: $box-shadow;
   width: 152%;
+  @include glass-button();
 }
 
 .event-card__header {
@@ -96,51 +95,54 @@ onMounted(() => {
   background: linear-gradient(90deg, $color-primary-gradient);
   animation: gradient-shift 4s linear infinite;
   border-radius: 12px 12px 0 0;
+  @include glass-button();
+
 }
 
 .event-card__header h2 {
   margin: 0;
   color: var(--color-white);
+  @include glass-text();
   font-size: 1.5rem;
 }
 
 .event-card__content {
   padding: 20px;
+  
 }
 
 .event-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  
 }
 
-.event-item {
+.event-item { @include glass-button();
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
   height: 120px;
-}
+ 
 
-.event-item:hover {
-  background-color: var(--color-white)-dark;
 }
-
 .event-item__info {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.event-item__avatar {
+.event-item__avatar { 
+
   width: 100px;
   height: 100px;
   object-fit: cover;
   border-radius: 12px;
+  @include glass-avatar();
 }
 
 .event-item__details {
@@ -149,6 +151,8 @@ onMounted(() => {
 }
 
 .event-item__title {
+  @include glass-text();
+
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -156,7 +160,7 @@ onMounted(() => {
 .event-item__date {
   font-size: 1rem;
   font-weight: normal;
-  color: #888;
+  color: #b8f1e6;
   margin-left: auto;
 }
 

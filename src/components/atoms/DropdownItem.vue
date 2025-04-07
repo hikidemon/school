@@ -1,9 +1,6 @@
 <template>
-
   <li class="dropdown-item" @click="handleClick">
-
-    <slot></slot>
-
+    <slot />
   </li>
 </template>
 

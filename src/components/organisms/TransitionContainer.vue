@@ -72,7 +72,7 @@ const toggleScheduleView = () => {
 
 button {
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: var(--color-white);
   border: none;
   border-radius: 5px;

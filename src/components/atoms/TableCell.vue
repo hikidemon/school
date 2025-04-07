@@ -11,10 +11,10 @@
 <script setup lang="ts">
 defineProps<{
   data?: {
-    time: string;
-    subject: string;
-    teacher: string;
-  };
+    time: string
+    subject: string
+    teacher: string
+  }
 }>()
 </script>
 

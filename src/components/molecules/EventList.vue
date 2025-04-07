@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import EventCard from '@/components/molecules/EventCard.vue'
 
-defineProps<{ events: Array<{ id: number, title: string, image: string, date: string }> }>()
+defineProps<{ events: Array<{ id: number; title: string; image: string; date: string }> }>()
 </script>
 
 <style scoped lang="scss">
@@ -15,6 +15,5 @@ defineProps<{ events: Array<{ id: number, title: string, image: string, date: st
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
-  
 }
 </style>

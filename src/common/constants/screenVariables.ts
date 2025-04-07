@@ -5,7 +5,7 @@ const BREAKPOINTS = {
   sm: 720, // мобилка
   md: 1024, // планшет
   lg: 1360, // десктоп
-  xl: 1440, // fullHD
+  xl: 1440 // fullHD
 }
 
 function sizes(screen: number): SizesType {
@@ -26,7 +26,7 @@ const screen = reactive<ScreenType>({
   isLaptop: sizes(window.innerWidth) === 'md',
   isDesktop: sizes(window.innerWidth) === 'lg',
   isFullHd: sizes(window.innerWidth) === 'xl',
-  isMobileOrTablet: ['xs', 'sm'].includes(sizes(window.innerWidth)),
+  isMobileOrTablet: ['xs', 'sm'].includes(sizes(window.innerWidth))
 })
 
 window.addEventListener('resize', () => {

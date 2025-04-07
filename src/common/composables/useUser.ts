@@ -7,10 +7,10 @@ export const useUser = () => {
     phone: '9585899558',
     surname: 'Фантастическая',
     password: 'superpassword',
-    phoneCode: '+7',
+    phoneCode: '+7'
   })
 
   return {
-    currentUser,
+    currentUser
   }
 }

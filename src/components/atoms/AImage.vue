@@ -8,12 +8,12 @@
 defineProps({
   src: {
     type: String,
-    required: true,
+    required: true
   },
   alt: {
     type: String,
-    default: 'Icon',
-  },
+    default: 'Icon'
+  }
 })
 </script>
 

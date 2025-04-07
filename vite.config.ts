@@ -12,21 +12,20 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 import svgLoader from 'vite-svg-loader'
 
 const autoImportConfig = AutoImport({
-  resolvers: [ElementPlusResolver()],
+  resolvers: [ElementPlusResolver()]
 })
 
 const componentsConfig = Components({
-  resolvers: [ElementPlusResolver()],
+  resolvers: [ElementPlusResolver()]
 })
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }): UserConfig => {
-  
   loadEnv(mode, process.cwd(), '')
 
   return {
     build: {
-      target: 'esnext',
+      target: 'esnext'
     },
     plugins: [
       vue(),
@@ -42,15 +41,15 @@ export default defineConfig(({ mode }): UserConfig => {
         /** custom trust domains */
         domains: ['*.custom.com'],
         /** custom certification directory */
-        certDir: '/Users/.../.devServer/cert',
-      }),
+        certDir: '/Users/.../.devServer/cert'
+      })
     ],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         styles: fileURLToPath(new URL('./src/assets/styles', import.meta.url)),
-        'mock-images': fileURLToPath(new URL('./public/mock-images', import.meta.url)),
-      },
+        'mock-images': fileURLToPath(new URL('./public/mock-images', import.meta.url))
+      }
     },
     css: {
       preprocessorOptions: {
@@ -59,15 +58,15 @@ export default defineConfig(({ mode }): UserConfig => {
             @use "styles/variables/index.scss" as *;
             @use "styles/mixins/index.scss" as *;
           `,
-          api: 'modern-compiler',
-        },
-      },
+          api: 'modern-compiler'
+        }
+      }
     },
     server: {
       // @ts-ignore
       https: true,
       host: true,
-      port: 8080,
-    },
+      port: 8080
+    }
   }
 })

@@ -1,70 +1,150 @@
 <template>
-  <el-form @submit.prevent="handleSubmit" class="post-form">
-    <el-form-item label="Заголовок поста" prop="title" class="elform">
-      <a-input v-model="form.title" placeholder="Введите заголовок" class="input-field" />
-    </el-form-item>
+  <el-dialog
+    :title="isEditMode ? 'Редактировать пост' : 'Создать пост'"
+    :model-value="visible"
+    width="600px"
+    @update:model-value="handleClose"
+  >
+    <el-form @submit.prevent="handleSubmit" class="post-form">
+      <el-form-item label="Заголовок поста" prop="title" class="elform">
+        <a-input v-model="form.title" placeholder="Введите заголовок" class="input-field" />
+      </el-form-item>
 
-    <el-form-item label="Описание поста" prop="content" class="elform">
-      <a-input type="textarea" v-model="form.content" placeholder="Введите описание" class="input-field" />
-    </el-form-item>
+      <el-form-item label="Описание поста" prop="content" class="elform">
+        <a-input type="textarea" v-model="form.content" placeholder="Введите описание" class="input-field" />
+      </el-form-item>
 
-    <el-form-item label="Тип поста" prop="type">
-      <div class="radio-buttons">
-        <label>
-          <input type="radio" v-model="form.type" value="news" />
-          Новость
-        </label>
-        <label>
-          <input type="radio" v-model="form.type" value="event" />
-          Мероприятие
-        </label>
-      </div>
-    </el-form-item>
+      <el-form-item label="Дата проведения" prop="date" v-if="form.type === 'event'">
+        <el-date-picker
+          v-model="form.date"
+          type="date"
+          placeholder="Выберите дату"
+          format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD"
+        />
+      </el-form-item>
 
-    <image-upload @upload="handleImageUpload" />
-    <a-button class="submit-button" type="submit">Создать пост</a-button>
-  </el-form>
+      <el-form-item label="Время проведения" prop="time" v-if="form.type === 'event'">
+        <el-time-picker
+          v-model="form.time"
+          placeholder="Выберите время"
+          format="HH:mm"
+          value-format="HH:mm"
+        />
+      </el-form-item>
 
-  <div v-if="posts.length" class="posts-list">
-    <post-card v-for="post in posts" :key="post.id" v-bind="post" @register="handleRegister" />
-  </div>
+      <el-form-item label="Место проведения" prop="area" v-if="form.type === 'event'">
+        <a-input v-model="form.area" placeholder="Введите место проведения" class="input-field" />
+      </el-form-item>
+
+      <el-form-item label="Изображения" prop="images">
+        <image-upload @upload="handleImageUpload" :images="form.image" />
+      </el-form-item>
+
+      <a-button class="submit-button" type="success" @click="handleSubmit">
+        {{ isEditMode ? 'Сохранить изменения' : 'Создать пост' }}
+      </a-button>
+    </el-form>
+  </el-dialog>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref, watch } from 'vue'
 import { ElNotification } from 'element-plus'
-import ImageUpload from './ImageUpload.vue'
-import PostCard from './PostCard.vue'
-import { authService } from '@/common/utils/AuthService'
+import ImageUpload from '@/components/molecules/ImageUpload.vue'
+import { Post } from '@/common/types/Post'
+import { postService } from '@/common/utils/PostService'
 
-const form = ref({
+const props = defineProps<{
+  visible: boolean
+  postToEdit?: Post | null
+}>()
+
+const emit = defineEmits(['success', 'close'])
+
+const form = ref<Post>({
+  id: null,
   title: '',
   content: '',
-  type: 'news',
-  image: null,
-  date: new Date().toISOString().split('T')[0]
+  type: 'event',
+  image: [],
+  area: '',
+  date: '',
+  time: '',
+  eventdate: ''
 })
 
-const posts = ref([])
+const isEditMode = ref(false)
 
-const handleImageUpload = (file) => {
-  form.value.image = file
+const handleImageUpload = (files: File[] | File) => {
+  const filesArray = Array.isArray(files) ? files : [files];
+  form.value.image = filesArray.map(file => {
+    if (file instanceof File) {
+      return URL.createObjectURL(file);
+    }
+    return file;
+  });
 }
 
-const handleSubmit = () => {
-  const newPost = { ...form.value, id: Date.now() }
-  emit('submit', newPost)
-  form.value = { title: '', content: '', type: 'news', image: null, date: new Date().toISOString().split('T')[0] }
-}
+const handleSubmit = async () => {
+  if (!form.value.title || !form.value.content) {
+    ElNotification({ title: 'Ошибка', message: 'Заполните все поля', type: 'error' })
+    return
+  }
 
-const handleRegister = async () => {
+  const postData: Post = {
+    ...form.value,
+    eventdate: `${form.value.date} ${form.value.time}`,
+  }
+
   try {
-    await authService.check()
-    ElNotification({ title: 'Успех', message: 'Вы зарегистрированы на мероприятие!', type: 'success' })
+    if (isEditMode.value && form.value.id !== null) {
+      await postService.updatePost(form.value.id, postData)
+    } else {
+      await postService.createPost(postData)
+    }
+
+    ElNotification({ title: 'Успех', message: 'Пост успешно сохранен', type: 'success' })
+    emit('success', postData)
+    resetForm()
   } catch (error) {
-    ElNotification({ title: 'Ошибка', message: 'Вы не авторизованы!', type: 'error' })
+    ElNotification({ title: 'Ошибка', message: 'Не удалось сохранить пост', type: 'error' })
   }
 }
+
+const resetForm = () => {
+  form.value = {
+    id: null,
+    title: '',
+    content: '',
+    type: 'event',
+    image: [],
+    area: '',
+    date: '',
+    time: '',
+    eventdate: ''
+  }
+  isEditMode.value = false
+  emit('close')
+}
+
+const handleClose = () => {
+  resetForm()
+  emit('close')
+}
+
+watch(
+  () => props.postToEdit,
+  (post) => {
+    if (post) {
+      form.value = { ...post }
+      isEditMode.value = true
+    } else {
+      resetForm() // Сбрасываем форму, если postToEdit равен null
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped lang="scss">
@@ -89,18 +169,6 @@ const handleRegister = async () => {
   margin-top: 8px;
   outline: none;
   resize: vertical;
-}
-
-.radio-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 0px;
-  margin: 0 0 0 45px;
-}
-
-.radio-buttons label {
-  display: flex;
-  align-items: center;
 }
 
 .submit-button {

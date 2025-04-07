@@ -2,40 +2,388 @@
 
 // colors
 $color-white: #fff;
-$color-white-dark:#f5f5f5;
+$color-white-dark: #f5f5f5;
 $color-black: #2c2c2c;
-$color-black-light:#333;
+$color-black-light: #333;
 $color-primary: #36ac55;
 $color-primary-dark: #3d8263;
 $color-primary-light: #4effa7;
-$color-emerald:#1dd3af;
+$color-emerald: #1dd3af;
 $color-secondary: #fba0c9;
 $color-secondary-dark: #9e628c;
 $color-secondary-light: #ffbbeb;
-$color-dark:#1d2021;
-$color-primary-gradient:#03ff89, #48f2b9, #6dedc2;
+$color-dark: #1d2021;
+$color-primary-gradient: #03ff89, #48f2b9, #6dedc2;
 $animation-gradient: gradient-shift 4s linear infinite;
-$box-shadow: 0 0 20px rgba(80, 200, 144, 0.7),0 0 30px rgba(80, 200, 172, 0.5),0 0 50px rgba(80, 200, 164, 0.3);
 
-$shadow: .3rem .3rem .6rem var(--greyLight-2), 
--.2rem -.2rem .5rem var(--white);
-$inner-shadow: inset .2rem .2rem .5rem var(--greyLight-2), 
-inset -.2rem -.2rem .5rem var(--white);
+// _glass-mixins.scss
 
+// Базовые переменные с настройками по умолчанию
+$glass-primary-color: rgba(16, 118, 93, 0.9) !default;
+$glass-secondary-color: rgba(16, 134, 101, 0.8) !default;
+$glass-accent-color: rgba(50, 220, 180, 0.7) !default;
+$glass-thickness: 10px !default;
+$glass-border-radius: 24px !default;
+$glass-blur: 16px !default;
+$glass-text-color: rgba(0, 40, 30, 0.9) !default;
+$glass-font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif !default;
+
+// Миксин для базового контейнера стекла
+@mixin glass-container(
+  $perspective: 1200px,
+  $transition: all 0.3s ease
+) {
+  perspective: $perspective;
+  position: relative;
+  transition: $transition;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+// Миксин для карточки стекла (основной эффект)
+@mixin glass-card(
+  $border-radius: $glass-border-radius,
+  $shadow: 0 10px 30px rgba(0, 60, 45, 0.3),
+  $transition: transform 0.1s linear border-radius 0.7s cubic-bezier(0.23, 1, 0.32, 1)
+) {
+  position: relative;
+  border-radius: $border-radius;
+  transform-style: preserve-3d;
+  transition: $transition;
+  will-change: transform, border-radius;
+  box-shadow: $shadow;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+    z-index: 3;
+    pointer-events: none;
+  }
+  
+  &:hover::before {
+    opacity: 0.9;
+  }
+}
+
+// Миксин для толщины стекла (глубина)
+@mixin glass-depth(
+  $thickness: $glass-thickness,
+  $color: $glass-primary-color,
+  $blur: 2px,
+  $opacity: 0.8
+) {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    145deg,
+    transparent 0%,
+    $color 50%,
+    transparent 100%
+  );
+  transform: translateZ(-$thickness);
+  filter: blur($blur);
+  opacity: $opacity;
+  z-index: 1;
+  pointer-events: none;
+}
+
+// Миксин для содержимого стекла
+@mixin glass-content(
+  $padding: 28px,
+  $blur: $glass-blur,
+  $border: 1px solid rgba(255, 255, 255, 0.15),
+  $primary: $glass-primary-color,
+  $secondary: $glass-secondary-color
+) {
+  padding: $padding;
+  backdrop-filter: blur($blur) brightness(1.2);
+  -webkit-backdrop-filter: blur($blur) brightness(1.2);
+  border-radius: inherit;
+  background: linear-gradient(
+    145deg,
+    rgba($secondary, 0.8) 0%,
+    rgba($primary, 0.9) 100%
+  );
+  border: $border;
+  transform-style: preserve-3d;
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+// Миксин для отражений
+@mixin glass-reflections(
+  $opacity-1: 0.3,
+  $opacity-2: 0.2,
+  $color: rgba(255, 255, 255, 0.4)
+) {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+ 
+  z-index: 1;
+
+  .reflection {
+    position: absolute;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0) 0%,
+      $color 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform-origin: center;
+  }
+
+  .reflection-1 {
+    width: 150%;
+    height: 40%;
+    top: -20%;
+    left: -25%;
+    transform: rotate(15deg);
+    opacity: $opacity-1;
+    transition: opacity 0.4s ease;
+    animation: reflection-shine 8s infinite linear;
+  }
+
+  .reflection-2 {
+    width: 200%;
+    height: 30%;
+    top: 60%;
+    left: -50%;
+    transform: rotate(-10deg);
+    opacity: $opacity-2;
+    transition: opacity 0.4s ease;
+    animation: reflection-shine 12s infinite linear reverse;
+  }
+}
+
+// Миксин для 3D текста
+@mixin glass-text(
+  $size: 2.2rem,
+  $weight: 800,
+  $thickness: $glass-thickness,
+  $color: $glass-text-color,
+  $glow-color: $glass-accent-color,
+  $font-family: $glass-font-family
+) {
+  --glass-text-hue-rotate: 0deg;
+  --glass-text-brightness: 1;
+  
+  font-family: $font-family;
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+  display: inline-block;
+  position: relative;
+  text-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.3),
+    0 -1px 0 rgba(0, 0, 0, 0.7),
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 4px 8px rgba($glow-color, 0.3),
+    0 8px 16px rgba($glow-color, 0.2);
+  
+  &::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: rgba($glow-color, 0.7);
+    z-index: -1;
+    transform: translateZ(-$thickness/2);
+    filter: 
+      blur(1px)
+      hue-rotate(var(--glass-text-hue-rotate))
+      brightness(var(--glass-text-brightness));
+    text-shadow: 
+      0 0 10px rgba($glow-color, 0.7),
+      0 0 20px rgba($glow-color, 0.5),
+      0 0 30px rgba($glow-color, 0.3);
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -4px;
+
+    border-radius: 50%;
+    filter: blur(2px);
+    z-index: -2;
+    transform: translateZ(-$thickness);
+  }
+}
+
+// Миксин для стеклянных кнопок/тегов
+@mixin glass-button(
+  $padding: 8px 16px,
+  $border-radius: 18px,
+  $primary: $glass-primary-color,
+  $secondary: $glass-secondary-color,
+  $blur: 8px,
+  $border: 1px solid rgba($glass-accent-color, 0.3)
+) {
+  padding: $padding;
+  border-radius: $border-radius;
+  background: linear-gradient(
+    145deg,
+    rgba($primary, 0.6) 0%,
+    rgba($secondary, 0.8) 100%
+  );
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: $border;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    0 0 10px rgba($glass-accent-color, 0.2);
+  transform: translateZ(10px);
+  transition: 
+    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-3px) translateZ(15px);
+    box-shadow: 
+      0 4px 16px rgba($primary, 0.4),
+      inset 0 1px 1px rgba(255, 255, 255, 0.2),
+      0 0 20px rgba($glass-accent-color, 0.3);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+  
+  &:hover::before {
+    transform: translateX(100%);
+  }
+}
+
+// Миксин для аватара с ореолом
+@mixin glass-avatar(
+  $size: 80px,
+  $blur: 6px,
+  $halo-color: $glass-accent-color,
+  $border: 2px solid rgba(255, 255, 255, 0.3)
+){
+  position: relative;
+  width: $size;
+  height: $size;
+
+  .glass-avatar-halo {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba($halo-color, 0.7) 180deg,
+      rgba(255, 255, 255, 0.9) 360deg
+    );
+    z-index: 1;
+    filter: blur($blur);
+    animation: glass-rotate-halo 8s linear infinite;
+    opacity: 0.8;
+   
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+    z-index: 2;
+    border: $border;
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.3),
+      inset 0 0 20px rgba($halo-color, 0.4);
+  }
+}
+
+// Анимации для стеклянных эффектов
+@mixin glass-animations() {
+  @keyframes glass-rotate-halo {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes reflection-shine {
+    0% { transform: translateX(-100%) rotate(15deg); }
+    100% { transform: translateX(100%) rotate(15deg); }
+  }
+
+  @keyframes glass-glow {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+}
+
+// Миксин для инициализации стеклянного дизайна (включает все анимации)
+@mixin glass-init() {
+  @include glass-animations();
+}
+
+$box-shadow:
+  0 0 20px rgba(80, 200, 144, 0.7),
+  0 0 30px rgba(80, 200, 172, 0.5),
+  0 0 50px rgba(80, 200, 164, 0.3);
+$ushadow:4px 4px 4px 4px rgba(0, 252, 181, 0.1);
+$shadow:
+  0.3rem 0.3rem 0.6rem var(--greyLight-2),
+  -0.2rem -0.2rem 0.5rem var(--white);
+$inner-shadow:
+  inset 0.2rem 0.2rem 0.5rem var(--greyLight-2),
+  inset -0.2rem -0.2rem 0.5rem var(--white);
+
+@mixin card-style($border-color: #e0e0e0, $border-radius: 8px, $shadow-color: rgba(0, 0, 0, 0.1), $shadow-blur: 10px, $shadow-spread: 0, $shadow-x: 0, $shadow-y: 4px) {
+  border: 1px solid var(--color-emerald);
+  box-shadow:  4px 4px 6px  rgba(80, 200, 144, 0.7),
+  4px 4px 6px rgba(80, 200, 172, 0.5),
+  4px 4px 6px rgba(80, 200, 164, 0.3);;
+  
+  &:hover {
+    box-shadow: $shadow-x ($shadow-y + 2px) ($shadow-blur + 2px) $shadow-spread darken($shadow-color, 10%);
+    transform: translateY(-2px);
+  }
+}
 $colors: (
   white: $color-white,
   black: $color-black,
   primary: $color-primary,
   secondary: $color-secondary,
   dark: $color-dark,
-  primary-dark:$color-primary-dark ,
-  primary-light:$color-primary-light,
-  secondary-dark:$color-secondary-dark,
-  secondary-light:$color-secondary-light,
-  emerald:$color-emerald,
-  primary-gradient:$color-primary-gradient,
-  black-light:$color-black-light,
-  white-dark:$color-white-dark,
-  box-shadow:$box-shadow,
-  
-);  
+  primary-dark: $color-primary-dark,
+  primary-light: $color-primary-light,
+  secondary-dark: $color-secondary-dark,
+  secondary-light: $color-secondary-light,
+  emerald: $color-emerald,
+  primary-gradient: $color-primary-gradient,
+  black-light: $color-black-light,
+  white-dark: $color-white-dark,
+  box-shadow: $box-shadow
+);
