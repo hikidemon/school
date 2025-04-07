@@ -14,11 +14,11 @@
 a {
   font-weight: 500;
   text-decoration: inherit;
-  color: #646cff;
+  color: #f7ff64;
 }
 
 a:hover {
-  color: #535bf2;
+  color: #dff253;
 }
 
 body {
@@ -27,6 +27,7 @@ body {
   display: flex;
   place-items: center;
   margin: 0;
+  cursor: url('/cursor.png') 6 2, auto;
 }
 
 h1 {
@@ -47,7 +48,7 @@ button {
 }
 
 button:hover {
-  border-color: #646cff;
+  border-color: #e8ff64;
 }
 
 button:focus,
@@ -73,7 +74,7 @@ button:focus-visible {
   }
 
   a:hover {
-    color: #747bff;
+    color: #d8ff74;
   }
 
   button {

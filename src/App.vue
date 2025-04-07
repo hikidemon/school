@@ -4,8 +4,8 @@
       <el-config-provider :locale="ru">
         <layout-default>
           <router-view v-loading="isGlobalLoading" />
-        </layout-default>
-      </el-config-provider></theme-provider>
+        </layout-default> </el-config-provider
+    ></theme-provider>
   </div>
 </template>
 
@@ -22,7 +22,6 @@ const isGlobalLoading = ref(false)
 html,
 body {
   overflow: hidden;
-
 }
 
 .main-page {

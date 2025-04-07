@@ -1,6 +1,13 @@
 <template>
-  <el-button v-on="$attrs" v-bind="$attrs" round :size="props.size" :type="props.type" class="mg-button el-button"
-    :class="{ 'no-border': props.noBorder }">
+  <el-button
+    v-on="$attrs"
+    v-bind="$attrs"
+    round
+    :size="props.size"
+    :type="props.type"
+    class="mg-button el-button"
+    :class="{ 'no-border': props.noBorder }"
+  >
     <slot name="default" />
   </el-button>
 </template>
@@ -15,16 +22,17 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
   size: 'default',
   type: 'primary',
-  noBorder: false,
+  noBorder: false
 })
 </script>
 
-<style scoped lang="scss" >
+<style scoped lang="scss">
 .no-border {
   border: 1px;
 }
 
 .el-button {
+  
   --el-button-size: unset;
   --el-button-bg-color: var(--color-white);
   --el-button-text-color: $color-primary;
@@ -65,13 +73,15 @@ const props = withDefaults(defineProps<Props>(), {
     &:active {
       --el-button-bg-color: var(--color-secondary);
 
-      box-shadow: .3rem .3rem .6rem var(--greyLight-2),
-        -.2rem -.2rem .5rem var(--white);
+      box-shadow:
+        0.3rem 0.3rem 0.6rem var(--greyLight-2),
+        -0.2rem -0.2rem 0.5rem var(--white);
     }
 
     &:disabled {
-      box-shadow: inset .2rem .2rem .5rem var(--greyLight-2),
-        inset -.2rem -.2rem .5rem var(--white);
+      box-shadow:
+        inset 0.2rem 0.2rem 0.5rem var(--greyLight-2),
+        inset -0.2rem -0.2rem 0.5rem var(--white);
     }
   }
 
@@ -102,5 +112,7 @@ const props = withDefaults(defineProps<Props>(), {
     letter-spacing: 0.12px;
     padding: 8px 16px;
   }
+  @include glass-button();
+
 }
 </style>

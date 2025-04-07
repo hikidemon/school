@@ -1,6 +1,6 @@
 <template>
   <div class="menu">
-    <el-link href="#" class="link " @click.prevent="toggleView(false)" :class="{ active: isSelected === false }">
+    <el-link href="#" class="link" @click.prevent="toggleView(false)" :class="{ active: isSelected === false }">
       <span class="link-icon">
         <calendarstats class="icon" />
       </span>
@@ -27,6 +27,7 @@ const isSelected = ref<boolean>(true)
 
 const toggleView = (value: boolean) => {
   isSelected.value = value
+
   emit('toggle-view', value)
 }
 </script>
@@ -38,7 +39,6 @@ const toggleView = (value: boolean) => {
   display: flex;
   justify-content: center;
   border-radius: 15px;
- 
 }
 
 .link {
@@ -56,11 +56,13 @@ const toggleView = (value: boolean) => {
   color: inherit;
   flex-direction: column;
   border-bottom: 2px solid transparent;
+ 
 }
 
 .link:hover {
   width: auto;
   border-bottom: none;
+  color:$glass-accent-color;
 }
 
 .link-icon {
@@ -69,6 +71,7 @@ const toggleView = (value: boolean) => {
   display: block;
   flex-shrink: 0;
   border-bottom: 2px solid transparent;
+  color:$glass-accent-color;
 }
 
 .link-title {
@@ -107,13 +110,16 @@ const toggleView = (value: boolean) => {
   box-shadow: none !important;
   border-bottom: none !important;
   border: none;
+  
 }
 
 .icon {
   height: 40px;
   width: 40px;
 }
-
+.icon :active{
+  color:$glass-accent-color;
+}
 @keyframes gradient-shift {
   0% {
     background-position: 0%;

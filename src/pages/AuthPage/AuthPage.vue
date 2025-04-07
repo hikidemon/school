@@ -3,12 +3,26 @@
     <div v-loading="isLoading" class="auth-page__form">
       <h1 class="auth-page__title">Авторизация</h1>
       <el-form ref="formRef" :model="auth" label-position="top" :rules="rules" @submit.prevent>
+        <a-input
+          v-model="auth.email"
+          label="Email"
+          prop="email"
+          placeholder="Введите email"
+          class="w-100"
+          @blur="handleBlur"
+        />
 
-        <a-input v-model="auth.email" label="Email" prop="email" placeholder="Введите email" class="w-100"
-          @blur="handleBlur" />
-
-        <a-input v-model="auth.password" label="Пароль" prop="password" type="password" placeholder="Введите пароль"
-          class="w-100" @blur="handleBlur" @input="handleBlur" @change="handleBlur" />
+        <a-input
+          v-model="auth.password"
+          label="Пароль"
+          prop="password"
+          type="password"
+          placeholder="Введите пароль"
+          class="w-100"
+          @blur="handleBlur"
+          @input="handleBlur"
+          @change="handleBlur"
+        />
         <a-button native-type="submit" size="large" :disabled="isLoginDisabled" @click="handleSubmit()">
           Войти
         </a-button>
@@ -17,7 +31,6 @@
       <router-link :to="{ name: ROUTE_NAMES.Registration }" class="color-apple mt-20">Зарегистрироваться</router-link>
     </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
@@ -32,12 +45,12 @@ const formRef = ref<FormInstance>()
 
 const auth = ref({
   email: '',
-  password: '',
+  password: ''
 })
 
 const rules = reactive<FormRules<typeof auth>>({
   password: [REQUIRED_RULE(), PASSWORD_RULE()],
-  email: [REQUIRED_RULE(), EMAIL_RULE(['blur', 'change'])],
+  email: [REQUIRED_RULE(), EMAIL_RULE(['blur', 'change'])]
 })
 
 const isLoading = ref(false)

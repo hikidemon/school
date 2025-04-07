@@ -18,11 +18,11 @@ $breakpoints-with-max: (
   sm: '(max-width: #{$breakpoint--md - 1px})',
   md: '(min-width: #{$breakpoint--md}) and (max-width: #{$breakpoint--lg - 1px})',
   lg: '(min-width: #{$breakpoint--lg}) and (max-width: #{$breakpoint--xl - 1px})',
-  xl: '(min-width: #{$breakpoint--xl})',
+  xl: '(min-width: #{$breakpoint--xl})'
 );
 
 $breakpoints-only-max: (
   sm: '(max-width: #{$breakpoint--md - 1px})',
   md: '(max-width: #{$breakpoint--lg - 1px})',
-  lg: '(max-width: #{$breakpoint--xl - 1px})',
+  lg: '(max-width: #{$breakpoint--xl - 1px})'
 );

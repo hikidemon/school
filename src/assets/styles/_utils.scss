@@ -6,7 +6,7 @@
     sm: var(--font-size--sm),
     md: var(--font-size--md),
     lg: var(--font-size--lg),
-    xl: var(--font-size--xl),
+    xl: var(--font-size--xl)
   )
 );
 @include generate-margin-classes(
@@ -24,7 +24,7 @@
     32: 32px,
     40: 40px,
     48: 48px,
-    100: 100px,
+    100: 100px
   )
 );
 @include generate-padding-classes(
@@ -38,7 +38,7 @@
     24: 24px,
     32: 32px,
     40: 40px,
-    48: 48px,
+    48: 48px
   )
 );
 

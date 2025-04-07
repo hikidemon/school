@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import PostForm from '../molecules/PostForm.vue';
+import PostForm from '../molecules/PostForm.vue'
 import { postService } from '@/common/utils/PostService'
 import type { Post } from '@/common/utils/PostService'
 import { ElNotification } from 'element-plus'
@@ -20,14 +20,14 @@ const handleFormSubmit = async (post: Post) => {
         title: 'Ошибка',
         message: 'Произошла ошибка при создании поста',
         type: 'error',
-        duration: 5000,
+        duration: 5000
       })
     } else {
       ElNotification({
         title: 'Успех',
         message: 'Пост успешно создан!',
         type: 'success',
-        duration: 5000,
+        duration: 5000
       })
     }
   } catch (error) {
@@ -37,7 +37,7 @@ const handleFormSubmit = async (post: Post) => {
       title: 'Ошибка',
       message: 'Произошла ошибка при отправке данных',
       type: 'error',
-      duration: 5000,
+      duration: 5000
     })
   }
 }

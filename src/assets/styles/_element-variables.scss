@@ -1,0 +1,63 @@
+// element-overrides.scss
+
+:root {
+  --el-color-primary: var(--color-emerald);
+  --color-emerald: #007f5f; // определим если еще нет
+
+}
+
+// element-overrides.scss или внутри <style lang="scss" scoped> если компонентный
+
+@include glass-animations();
+// Сам селект (коробка, где выбранный элемент)
+.el-select {
+ 
+  border-radius: 8px !important;
+  background: rgba(0, 127, 95, 0.5) !important;
+  color: rgba(0, 127, 95, 0.5) !important;
+
+  
+  .el-input {
+    .el-input__wrapper {
+      background: rgba(0, 127, 95, 0.5) !important;
+      border-radius: 8px !important;
+      box-shadow: none !important;
+      color: white !important;
+
+      input {
+        background: transparent !important;
+        color: white !important;
+      }
+    }
+  }
+}
+.edit{
+ color: rgb(5, 5, 5);
+ font-size: 30px;
+}
+// Выпадающее меню
+.el-select-dropdown {
+  background: linear-gradient(
+    145deg,
+    rgba($glass-primary-color, 0.9) 0%,
+    rgba($glass-primary-color, 0.8) 100%
+  ) !important;
+  backdrop-filter: blur(10px) !important;
+
+  
+
+  .el-select-dropdown__item {
+   
+    background-color: transparent !important;
+    color: white !important;
+
+    &:hover {
+      background-color: rgba(18, 95, 86, 0.4) !important;
+    }
+
+    &.selected {
+      background-color: rgba(0, 127, 95, 0.6) !important;
+      font-weight: bold;
+    }
+  }
+}

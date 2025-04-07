@@ -11,11 +11,23 @@
             <a-input v-model="registr.email" placeholder="Email" type="email" class="styled-input w-100" />
           </el-form-item>
           <el-form-item prop="password" label="Пароль" class="label">
-            <a-input v-model="registr.password" placeholder="Password" type="password" class="styled-input w-100"
-              @blur="handleRegistrBlur" @input="handleRegistrBlur" @change="handleRegistrBlur" :show-password="true" />
+            <a-input
+              v-model="registr.password"
+              placeholder="Password"
+              type="password"
+              class="styled-input w-100"
+              @blur="handleRegistrBlur"
+              @input="handleRegistrBlur"
+              @change="handleRegistrBlur"
+              :show-password="true"
+            />
           </el-form-item>
-          <a-button class="styled-button w-100" style="margin-top: 15px" :disabled="isRegistrDisabled"
-            @click="handleFormSubmit('registr')">
+          <a-button
+            class="styled-button w-100"
+            style="margin-top: 15px"
+            :disabled="isRegistrDisabled"
+            @click="handleFormSubmit('registr')"
+          >
             Зарегистрироваться
           </a-button>
         </el-form>
@@ -27,12 +39,24 @@
             <a-input v-model="auth.email" placeholder="Email" type="email" class="styled-input w-100" />
           </el-form-item>
           <el-form-item prop="password" label="Пароль" class="label">
-            <a-input v-model="auth.password" placeholder="Password" :show-password="true" type="password"
-              class="styled-input w-100" @blur="handleAuthBlur" @input="handleAuthBlur" @change="handleAuthBlur" />
+            <a-input
+              v-model="auth.password"
+              placeholder="Password"
+              :show-password="true"
+              type="password"
+              class="styled-input w-100"
+              @blur="handleAuthBlur"
+              @input="handleAuthBlur"
+              @change="handleAuthBlur"
+            />
           </el-form-item>
           <router-link :to="{ name: ROUTE_NAMES.FailPassword }" class="router-link">Забыли пароль?</router-link>
-          <a-button native-type="submit" class="styled-button w-100" :disabled="isLoginDisabled"
-            @click="handleFormSubmit('auth')">
+          <a-button
+            native-type="submit"
+            class="styled-button w-100"
+            :disabled="isLoginDisabled"
+            @click="handleFormSubmit('auth')"
+          >
             Войти
           </a-button>
         </el-form>
@@ -82,29 +106,29 @@ const generateStarStyle = () => {
     width: `${size}px`,
     height: `${size}px`,
     animationDelay: `${delay}s`,
-    animationDuration: `${duration}s`,
+    animationDuration: `${duration}s`
   }
 }
 
 const auth = ref({
   email: '',
-  password: '',
+  password: ''
 })
 
 const registr = ref({
   email: '',
   password: '',
-  id_role: '1',
+  id_role: '1'
 })
 
 const registrRules = reactive<FormRules<typeof registr>>({
   email: [REQUIRED_RULE(), EMAIL_RULE(['blur', 'change'])],
-  password: [REQUIRED_RULE(), PASSWORD_RULE()],
+  password: [REQUIRED_RULE(), PASSWORD_RULE()]
 })
 
 const authRules = reactive<FormRules<typeof auth>>({
   email: [REQUIRED_RULE(), EMAIL_RULE(['blur', 'change'])],
-  password: [REQUIRED_RULE(), PASSWORD_RULE()],
+  password: [REQUIRED_RULE(), PASSWORD_RULE()]
 })
 
 const handleRegistrBlur = () => {
@@ -138,7 +162,7 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
         const [error] = await authService.register({
           email: registr.value.email,
           password: registr.value.password,
-          id_role: registr.value.id_role,
+          id_role: registr.value.id_role
         })
 
         if (error) {
@@ -146,7 +170,7 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
             title: 'Ошибка!',
             message: error.response?.data?.message || 'Ошибка регистрации',
             type: 'error',
-            position: 'bottom-right',
+            position: 'bottom-right'
           })
 
           return
@@ -156,14 +180,14 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
           title: 'Успешно!',
           message: 'Аккаунт успешно создан!',
           type: 'success',
-          position: 'bottom-right',
+          position: 'bottom-right'
         })
 
         authStore.togglePanel('signIn')
       } else {
         const [error] = await authService.login({
           email: auth.value.email,
-          password: auth.value.password,
+          password: auth.value.password
         })
         // const decodedData=jwtDecode(response?.data)
 
@@ -172,7 +196,7 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
             title: 'Ошибка!',
             message: error.response?.data?.message || 'Ошибка авторизации',
             type: 'error',
-            position: 'bottom-right',
+            position: 'bottom-right'
           })
 
           return
@@ -191,7 +215,7 @@ const handleFormSubmit = async (formType: 'registr' | 'auth') => {
         title: 'Ошибка!',
         message: 'Произошла ошибка. Попробуйте ещё раз.',
         type: 'error',
-        position: 'bottom-right',
+        position: 'bottom-right'
       })
     } finally {
       isLoading.value = false
@@ -230,7 +254,6 @@ const isRightPanelActive = computed(() => authStore.isRightPanelActive)
   z-index: 1;
 }
 
-
 .star {
   position: absolute;
   top: -10px;
@@ -257,7 +280,6 @@ const isRightPanelActive = computed(() => authStore.isRightPanelActive)
 }
 
 .label {
-
   text-align: left;
   color: var(--color-black);
   width: 100%;
@@ -274,12 +296,8 @@ body {
   margin-top: 20px;
   height: 100%;
   width: 100%;
-
 }
 
-button {
-  background-color: #91e9d0;
-}
 
 a {
   color: var(--color-black)-light;
@@ -294,6 +312,7 @@ input {
 }
 
 .container {
+ 
   background: #1d2021;
   border-radius: 10px;
   box-shadow: $box-shadow;
@@ -353,9 +372,12 @@ button:focus {
 }
 
 button.ghost {
+
   margin-top: -30px;
   background: var(--color-primary-light);
   border-color: #000000;
+  border:none;
+  @include glass-button();
 }
 
 .form-container {
@@ -388,11 +410,28 @@ button.ghost {
   transition: transform 0.6s ease-in-out;
   z-index: 1;
 }
-
+@include glass-animations();
 .overlay {
+  $padding: 28px;
+  $blur: $glass-blur;
+  $border: 1px solid rgba(255, 255, 255, 0.15);
+  $primary: $glass-primary-color;
+  $secondary: $glass-secondary-color;
   background: #000000;
-  background: linear-gradient(to bottom, $color-primary, var(--color-primary-dark)) no-repeat 0 0 / cover;
-  color: var(--color-white);
+  backdrop-filter: blur($blur) brightness(1.2);
+  -webkit-backdrop-filter: blur($blur) brightness(1.2);
+  border-radius: inherit;
+  background: linear-gradient(
+    145deg,
+    rgba($secondary, 0.8) 0%,
+    rgba($primary, 0.9) 100%
+  ); 
+  border: $border;
+  transform-style: preserve-3d;
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  box-sizing: border-box; color: var(--color-white);
   position: relative;
   left: -100%;
   height: 100%;
@@ -479,20 +518,23 @@ h1::after {
   margin-top: 0;
   margin-bottom: 40px;
   font-size: clamp(1rem, 1rem + 2vw, 6rem);
-  background: linear-gradient(90deg, $color-primary-gradient );
+  background: linear-gradient(90deg, $color-primary-gradient);
   background-size: 500% 100%;
   animation: gradient-shift 4s linear infinite;
   color: transparent;
   background-clip: text;
+  $primary: $glass-primary-color;
+  $secondary: $glass-secondary-color;
+  @include glass-text($color:$glass-accent-color);
+  background: linear-gradient(
+    145deg,
+    rgba($secondary, 0.8) 0%,
+    rgba($primary, 0.9) 100%
+  );
+  background-clip: text;
 }
 
-h1::after {
-  filter: blur(6px);
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  mix-blend-mode: darken;
-}
+
 
 @keyframes blend {
   to {

@@ -1,6 +1,6 @@
 <template>
   <div class="profile-info">
-    <avatar :src="user.avatar" />
+    <el-avatar :src="user.avatar" />
     <h2>{{ user.name }}</h2>
     <p>{{ user.email }}</p>
     <p>Дата рождения: {{ user.birthdate }}</p>
@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import Avatar from '@/components/atoms/Avatar.vue'
 
-defineProps<{ user: { avatar: string, name: string, email: string, birthdate: string } }>()
+defineProps<{ user: { avatar: string; name: string; email: string; birthdate: string } }>()
 </script>
 
 <style scoped lang="scss">

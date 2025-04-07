@@ -1,21 +1,33 @@
 <template>
   <el-card class="user-card">
     <div class="user-card__header">
-      <el-avatar :size="100" :src="user.avatarUrl || Avatar" class="user-card__avatar" />
+     <div>
+      <img :size="100" :src="user.avatarUrl || Avatar" class="avatar" />
+      <div class="avatar-halo"></div></div>
       <div class="user-card__main-info">
         <h2 class="user-card__name h2">{{ user.name }}</h2>
       </div>
     </div>
 
     <div class="user-card__basic-info">
-      <info-item v-for="field in basicFields" :key="field.key" :label="field.label" :value="user[field.key]"
-        @update="(value) => updateField(field.key as keyof User, value)" />
+      <info-item
+        v-for="field in basicFields"
+        :key="field.key"
+        :label="field.label"
+        :value="user[field.key]"
+        @update="(value) => updateField(field.key as keyof User, value)"
+      />
     </div>
 
     <el-collapse-transition>
       <div v-show="showDetails" class="user-card__details">
-        <info-item v-for="field in additionalFields" :key="field.key" :label="field.label" :value="user[field.key]"
-          @update="(value) => updateField(field.key as keyof User, value)" />
+        <info-item
+          v-for="field in additionalFields"
+          :key="field.key"
+          :label="field.label"
+          :value="user[field.key]"
+          @update="(value) => updateField(field.key as keyof User, value)"
+        />
       </div>
     </el-collapse-transition>
 
@@ -47,21 +59,27 @@ const user = ref<User>({
   phone: '+7 (999) 123-45-67',
   address: 'ул. Пушкина, д. 10',
   birthdate: '1990-01-01',
-  occupation: 'Программист',
+  occupation: 'Программист'
 })
 
 const showDetails = ref(false)
 
-const basicFields = computed(() => [
-  { key: 'email', label: 'Email' },
-  { key: 'phone', label: 'Телефон' },
-] as const)
+const basicFields = computed(
+  () =>
+    [
+      { key: 'email', label: 'Email' },
+      { key: 'phone', label: 'Телефон' }
+    ] as const
+)
 
-const additionalFields = computed(() => [
-  { key: 'address', label: 'Адрес' },
-  { key: 'birthdate', label: 'Дата рождения' },
-  { key: 'occupation', label: 'Род деятельности' },
-] as const)
+const additionalFields = computed(
+  () =>
+    [
+      { key: 'address', label: 'Адрес' },
+      { key: 'birthdate', label: 'Дата рождения' },
+      { key: 'occupation', label: 'Род деятельности' }
+    ] as const
+)
 
 const fetchUserProfile = async () => {
   try {
@@ -75,7 +93,12 @@ const fetchUserProfile = async () => {
   } catch (error) {
     console.error('Ошибка при загрузке данных пользователя:', error)
 
-    ElMessage.error('Не удалось загрузить данные пользователя')
+    ElNotification({
+      title: 'Ошибка',
+      message: 'Не удалось загрузить данные пользователя',
+      type: 'error',
+      position: 'bottom-right'
+    })
   }
 }
 
@@ -91,7 +114,7 @@ const updateField = async (field: keyof User, value: string) => {
       title: 'Успешно',
       message: 'Данные обновлены',
       type: 'success',
-      position: 'bottom-right',
+      position: 'bottom-right'
     })
   } catch (error) {
     console.error('Ошибка при обновлении данных:', error)
@@ -100,7 +123,7 @@ const updateField = async (field: keyof User, value: string) => {
       title: 'Ошибка',
       message: 'Не удалось обновить данные',
       type: 'error',
-      position: 'bottom-right',
+      position: 'bottom-right'
     })
   }
 }
@@ -109,13 +132,39 @@ fetchUserProfile()
 </script>
 
 <style scoped lang="scss">
+.avatar-halo {
+  position: absolute;
+  top: 16px;
+  left: 2px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(50, 220, 180, 0.7) 180deg,
+    rgba(255, 255, 255, 0.9) 360deg
+  );
+  z-index: 1;
+  filter: blur(6px);
+  animation: rotate-halo 8s linear infinite;
+  opacity: 0.8;
+  width: 150px;
+  height: 150px;
+}
+@include glass-animations();
+.avatar-expanded {
+  transform: scale(2);
+}
 .user-card {
+ 
   max-width: 600px;
   margin: auto;
   width: 170%;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow:$box-shadow;}
+  border-radius: 12px; @include glass-button();
+  
+}
 
 .user-card__header {
   display: flex;
@@ -134,11 +183,27 @@ fetchUserProfile()
   align-items: center;
 }
 
-.user-card__avatar {
+.avatar {
+
+ 
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  transform: scale(1.6);
+  border-radius: 50%;
+  object-fit: cover;
+  position: relative;
+  z-index: 2;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 0 20px rgba(50, 220, 180, 0.4);
+
   flex-shrink: 0;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   margin-right: 20px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .user-card__basic-info,
@@ -161,6 +226,8 @@ fetchUserProfile()
   color: $color-emerald;
   font-size: 1rem;
   transition: color 0.3s ease;
+  @include glass-button();
+
 }
 
 .user-card__button:hover,
@@ -182,6 +249,7 @@ h2::after {
   animation: gradient-shift 4s linear infinite;
   color: transparent;
   background-clip: text;
+  @include glass-text();
 }
 
 h2::after {
@@ -191,7 +259,7 @@ h2::after {
   left: 0;
   mix-blend-mode: darken;
 }
-
+@include glass-animations();
 @keyframes blend {
   to {
     background-position: 400% 100%;

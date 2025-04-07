@@ -26,6 +26,7 @@ const handleTypeChange = (value) => {
 const handleRegister = async () => {
   try {
     await authService.check()
+
     router.push('/event-registration')
   } catch (error) {
     alert('Вы должны быть авторизованы для записи на мероприятие!')
@@ -39,6 +40,7 @@ const handleRegister = async () => {
   border-radius: 4px;
   font-size: 1rem;
   margin-bottom: 16px;
+  
 }
 
 .submit-button {

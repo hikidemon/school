@@ -9,6 +9,6 @@ export const useGlobalLoader = () => {
 
   return {
     isGlobalLoading: readonly(isGlobalLoading),
-    setGlobalLoader,
+    setGlobalLoader
   }
 }

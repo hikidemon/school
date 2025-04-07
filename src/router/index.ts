@@ -9,6 +9,9 @@ import CreatePost from '@/components/organisms/CreatePost.vue'
 import ProfileContent from '@/components/organisms/ProfileContent.vue'
 import NewsContent from '@/components/organisms/NewsContent.vue'
 import Schedule from '@/components/organisms/ScheduleContent.vue'
+import TeacherContent from '@/components/organisms/TeacherContent.vue'
+import StudentContent from '@/components/organisms/StudentContent.vue'
+import ProgramsContent from '@/components/organisms/ProgramsContent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,12 +19,12 @@ const router = createRouter({
     {
       path: '/ui',
       name: ROUTE_NAMES.UiKit,
-      component: UiKit,
+      component: UiKit
     },
     {
       path: '/auth',
       name: ROUTE_NAMES.AuthPage,
-      component: AllPage,
+      component: AllPage
     },
     {
       path: '/main',
@@ -30,35 +33,46 @@ const router = createRouter({
       children: [
         {
           path: '',
-          redirect: { name: ROUTE_NAMES.NewsContent },
+          redirect: { name: ROUTE_NAMES.NewsContent }
         },
         {
           path: 'profile-content',
           name: ROUTE_NAMES.ProfileContent,
-          component: ProfileContent,
+          component: ProfileContent
         },
         {
           path: 'posts',
           name: ROUTE_NAMES.NewsContent,
-          component: NewsContent,
+          component: NewsContent
         },
         {
           path: 'schedule',
           name: ROUTE_NAMES.Schedule,
-          component: Schedule,
+          component: Schedule
         },
-      ],
+        {
+          path: 'teacher',
+          name: ROUTE_NAMES.TeacherContent,
+          component: TeacherContent
+        },
+        {
+          path: 'student',
+          name: ROUTE_NAMES.StudentContent,
+          component: StudentContent
+        },
+        {
+          path: 'events',
+          name: ROUTE_NAMES.ProgramsContent,
+          component: ProgramsContent
+        }
+      ]
     },
-    {
-      path: '/create-post',
-      name: ROUTE_NAMES.CreatePost,
-      component: CreatePost,
-    },
+
     {
       path: '/:pathMatch(.*)*',
-      component: NotFoundPage,
-    },
-  ],
+      component: NotFoundPage
+    }
+  ]
 })
 
 export default router

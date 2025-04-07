@@ -4,5 +4,9 @@
 @import 'utils';
 @import 'mixins';
 @import 'variables';
-@import 'elementPlus';
+
+@import '_element-variables.scss';
 @import 'dark-theme';
+body {
+    cursor: url('/cursor.png') 6 2, auto;
+  }
