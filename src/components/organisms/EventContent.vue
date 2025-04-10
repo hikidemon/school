@@ -46,6 +46,7 @@ import '@/assets/styles/_dark-theme.scss'
 import { ElNotification } from 'element-plus'
 import PostForm from '@/components/molecules/PostForm.vue'
 import { authService } from '@/common/utils/AuthService'
+import { useAuthStore } from '@/store/AuthStore'
 
 const posts = ref<Post[]>([])
 const isModalVisible = ref(false)

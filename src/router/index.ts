@@ -11,6 +11,7 @@ import NewsContent from '@/components/organisms/NewsContent.vue'
 import Schedule from '@/components/organisms/ScheduleContent.vue'
 import TeacherContent from '@/components/organisms/TeacherContent.vue'
 import StudentContent from '@/components/organisms/StudentContent.vue'
+import EventContent from '@/components/organisms/EventContent.vue'
 import ProgramsContent from '@/components/organisms/ProgramsContent.vue'
 
 const router = createRouter({
@@ -62,6 +63,11 @@ const router = createRouter({
         },
         {
           path: 'events',
+          name: ROUTE_NAMES.EventContent,
+          component: EventContent
+        },
+        {
+          path: 'programs',
           name: ROUTE_NAMES.ProgramsContent,
           component: ProgramsContent
         }

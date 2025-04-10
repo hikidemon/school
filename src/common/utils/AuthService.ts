@@ -2,7 +2,11 @@ import type { ServiceResponseType } from './AxiosService'
 import { AxiosService, API_CONFIG } from './AxiosService'
 
 class AuthService extends AxiosService {
-  public async login(credentials: { email: string; password: string }): ServiceResponseType<{ token: string }> {
+  public async login(credentials: { email: string; password: string }): ServiceResponseType<{ 
+    token: string,
+    userId: string,
+    name: string,
+    role: string  }> {
     const config = {
       method: 'POST',
       url: 'http://localhost:5000/api/identity/login',
