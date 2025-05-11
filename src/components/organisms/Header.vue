@@ -206,11 +206,7 @@ defineProps({
   color: var(--color-white);
   padding: $padding;
 
-  background: linear-gradient(
-    145deg,
-    rgba($primary, 0.8) 0%,
-    rgba($secondary, 0.9) 100%
-  );
+  background: $iceglass;
   backdrop-filter: blur($blur);
   -webkit-backdrop-filter: blur($blur);
   box-shadow: 
@@ -221,8 +217,9 @@ defineProps({
   transition: 
     transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
     box-shadow 0.3s ease;
-  cursor: pointer;
+ 
   position: relative;
+  
  
 }
 
@@ -299,6 +296,7 @@ defineProps({
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
 
 
 </style>

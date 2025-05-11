@@ -296,6 +296,7 @@ $border-radius: 24px;
   transition: all 0.3s ease;
   will-change: transform;
   
+  
   &.expanded {
     position: fixed;
     z-index: 100;
@@ -338,7 +339,7 @@ $border-radius: 24px;
   height: auto;
   will-change: transform, border-radius;
   box-shadow: 0 10px 30px rgba(0, 60, 45, 0.3);
-
+  
   &::before {
     content: '';
     position: absolute;
@@ -376,11 +377,11 @@ $border-radius: 24px;
   backdrop-filter: blur(16px) brightness(1.2);
   -webkit-backdrop-filter: blur(16px) brightness(1.2);
   border-radius: $border-radius;
-  background: linear-gradient(
-    145deg,
-    rgba(30, 180, 140, 0.3) 0%,
-    rgba(10, 100, 80, 0.7) 100%
-  );
+  background: linear-gradient(145deg, 
+    rgba(15, 144, 111, 0.8) 0%, 
+    rgba(13, 168, 155, 0.8) 0%, 
+    rgba(9, 110, 93, 0.8) 50%, 
+    rgba(5, 101, 88, 0.8) 100%);
   transform-style: preserve-3d;
   position: relative;
   z-index: 2;
@@ -590,11 +591,7 @@ $border-radius: 24px;
 .subject-tag {
   padding: 8px 16px;
   border-radius: 18px;
-  background: linear-gradient(
-    145deg,
-    rgba(0, 80, 60, 0.6) 0%,
-    rgba(20, 160, 120, 0.8) 100%
-  );
+  background: $iceglass;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(50, 220, 180, 0.3);

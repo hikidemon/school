@@ -589,11 +589,7 @@
     backdrop-filter: blur(16px) brightness(1.2);
     -webkit-backdrop-filter: blur(16px) brightness(1.2);
     border-radius: $border-radius;
-    background: linear-gradient(
-      145deg,
-      rgba(30, 180, 140, 0.3) 0%,
-      rgba(10, 100, 80, 0.7) 100%
-    );
+    background:$iceglass;
     transform-style: preserve-3d;
     position: relative;
     z-index: 2;
