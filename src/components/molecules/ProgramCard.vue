@@ -277,6 +277,7 @@ const handleEnroll = async () => {
     backface-visibility: hidden;
     height: 100%; 
     display: flex;
+    
   }
   
   .glass-card {
@@ -298,6 +299,7 @@ const handleEnroll = async () => {
   isolation: isolate;
   will-change: transform;
   transform-origin: center;
+  
   }
   
   .glass-thickness {

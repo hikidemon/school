@@ -82,7 +82,7 @@ watchEffect(() => {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-
+  background: $iceglass;
   &.collapsed {
     width: 70px;
 
